@@ -1,0 +1,174 @@
+Day 1:
+------
+Full Stack -->FrontEnd + Backend
+
+FrontEnd:
+----------
+--> Front end is the visual and interactive layer of a website or application that users see directly and interact a web browser or mobile app.
+
+Responsibilities of FrontEnd:
+-----------------------------
+1.Display webpages and user interface(UI).
+2.Accept user input (forms, buttons, search boxes).
+3.Validates user input before sending to the server.
+4. Call back end APIs to fetch or send data.
+5.Display the response received from the backend.
+6.Provides animations and interactive effects.
+
+BackEnd:
+--------
+--> Back end is the server side part of an application
+--> user can't see directly , but it performs all business logic, security, data processing and database operations.
+--> It acts as brain of the application
+
+Responsibilities of Backend:
+----------------------------
+1.Process client request.
+2.Implements business logic
+3.connects with databases.
+4.performs CRUD operations.
+5.Authenticates and authorize users
+6.Encrypts passwords and sensitive data
+7.Geerate reports
+8.send emails and notifications
+9.handles file upload and downloads
+10.returns response to the client
+
+
+MySQL intro:
+------------
+
+Files:
+------
+--> Duplicate data
+--> No Secure, anyone can access data
+--> less amount of data can store.
+--> No structured Data
+--> difficult to access
+
+
+Data Base:
+---------
+--> No duplicate data
+--> Secured data
+--> easy to access and manage
+--> more amount of data can store compared to files
+--> Data can be stored in Structured.
+
+API - Application programming interface:
+----------------------------------------
+--> An API is a set of rules and protocalls that allows two different applications or systems to communicate and data exchange without exposing
+their internal implementation.
+--> It acts as a bridge between the frontend and backend or two different software systems.
+
+Storage Areas:
+--------------
+
+--> As part of our applications we required to store some data like customers information, bi;lling information, calls information etc.. to store this data
+we required storage areas.
+
+there are 2 types of storage areas such as
+1.temporary Storage areas
+2.Permanent Storage areas
+
+1.Temporary Storage areas:
+---------------------------
+These are the memory areas where the data will be stores temporary
+examples: all JVM memory areas (Heap, Stack) once JVM is shutdown all the memory areas will be cleared automatically.
+
+2.Permanent Storage areas:
+---------------------------
+Also Known as Persistent Storage areas, here we can store data permanently
+
+example: file systems, databases, data warehouse, big data etc....
+
+File Management System (FMS):
+-----------------------------
+--> A File management system is a system where data is stored in files on the operating systems. each application program mjust handle its own
+storage data retrival and updating. File Systems can be provided by the Local Operating System.
+
+File Systems are best suitable for to store very less amount of information(like KB)
+
+example: a library management system storing books in separate text files likes, books.txt, members.txt.
+
+Limitations of FMS:
+--------------------
+1.Data Redundancy:- same data stored in multiple files
+2.Data Inconsistency:- updates in one file many not be reflected in another
+3.Poor data security: No proper accessed control
+4. Difficult Data Retrieval: Searching required custom programs
+5. integrity issues: No contains (eg. roll number is uniquess)
+6.Scalability issues: hard to manage as data grows
+
+to overcome the above problems of file systems we should go for databases.
+
+DBMS(Database Management System)
+--------------------------------
+A DBMS is collection of programs that enables users to create, manage and manipulate databases.
+
+advantages:
+-----------
+1.we can store huge amount of information in databases.
+2.Query language support is available for every database hence we can perfom database operations easily
+3.To access data present in the database, compulsory username and password must be required hence data is secured.
+
+Drawbacks:
+-----------
+1.Databases cannot store huge amount of information like (1000gb) data
+2.Database can provide support for only structured data (tabular data or relational data) and cannot provide support for semi structured data like(XML files) and audios and videos
+
+FMS vs DBMS (IQ):
+-----------------
+1. Data is Stored in separate files
+   data is stored in structured database
+
+2. High data redundancy (Duplicate data)
+   Reduces data redundancy
+
+3. Difficult to maintain and update
+   Easy to Maintain and Update
+
+4. Security is limited
+   providing strong security mechanism
+
+5. data sharing is difficult
+   multiple uses can accesses data simultaneously
+
+6. No relationships between files
+   Support relationships between tables
+
+7. Backup and recovery is difficult 
+   provides backup and recovery features
+
+8. suitable for small applications
+   sutibale for small, medium and large applications
+
+Q: What is the difference between a File System and a DBMS?
+
+Ans: A file system stores data in separate files and may lead to data redundancy and security issues, A DBMS stores data in structured manner using tables,
+reduces redundancy, provides security, supports multiple users, and ensures data consistency and integrity.
+ 
+Q: What is Data, Field, Record and Database?
+
+Data: Raw facts or figures without context
+example: 101, malli, 60000, java
+
+field: Smallest unit of data in a database (column / attribute)
+example: eno, ename, esal, edept
+
+Record: collection of related fields (row/list)
+example: (101,'ravi',78000,'java')
+
+Database: Organized collection of related records stored together
+example: an employee database containing all employee records
+
+
+
+
+
+
+
+
+
+
+
