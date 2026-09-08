@@ -1,0 +1,87 @@
+Numeric functions:
+
+abs()----absolute value of a number.
+ceil()----rounded up
+floor()----rounded down
+round()---rounds a specific number of digits.
+mod()----modulo operation
+pow/power----exponentiation
+sqrt()----square root of a number.
+
+SIGN() 
+0 FOR ZERO
+-1 NEGATIVE NUMBERS
+1 POSITIVE NUMBERS
+
+X=0O10;
+print(X);
+8
+X=0b10;
+print(X);
+2
+X=0x10;
+print(X);
+16
+X=10;
+print(X);
+10
+
+ex:
+
+x=0b10;
+y=0b123;
+Syntax Error: invalid digit '2' in binary literal
+z=0o34;
+a=0o765;
+b=0x123;
+c=0xbeer;
+Syntax Error: invalid hexadecimal literal
+d=0xface;
+
+String functions:
+
+CONCATE
+UPPER 
+LOWER
+SUBSTRING
+LENGTH
+REPLACE 
+TRIM
+
+
+CHECK IF ANY EMPLOYEES FIRST_NAME IS A PALINDROME
+
+SELECT FIRST_NAME,
+CONCAT(LEFT(EMAIL,3),'***@',SUBSTRING_INDEX(EMAIL,'@',-1))AS MASKED_EMAIL FROM EMPLOYEES;
+
+SELECT first_name
+FROM employees
+WHERE LOWER(first_name) = REVERSE(LOWER(first_name));
+
+SELECT FIRST_NAME,
+CASE WHEN LENGTH(FIRST_NAME)<=5 THEN 'SHORT NAME'
+ELSE 'LONG NAME' END AS NAME_CATEGORY
+FROM EMPLOYEES;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
