@@ -1,0 +1,235 @@
+DAY-12 OF MYSQL-JOINS AND
+
+
+# JOINS
+===========
+* A JOIN IS MYSQL IS COMBINE ROWS FROM TWO OR MORE TABLES IS BASED ON RELATED COLUMNS.
+ MULTIPLE TO FETCH  THE DATA
+
+EX: EMPLOYEE TABLE ---. EMPLOYEE RECORDS
+DEPARTMENTS ---> DEPARTMENTS DETAILS.
+
+ IF YOU WANT TO SEE WHICH EMPLOYEES BELONGINGS TO WJHICH DEPARTMENT YOU NEED TO JIN THESE TWO TABLES.
+
+#  * WHY DO WE NEED JOINS?
+TO FETCH DATA FROM MULTIPLE TABLES IN A SINGLE QUERY
+TO REDUCE DATA DUPLICATES (INSTEAD OF KEEPING EVERYTHING IN ONE TABLE)
+TO IMPLEMENTS RELATIONSHIP (ONE-TO-ONE,ONE-TO-MANY,MANY-TO-MANY,MANY-TO-ONE).
+TO GENETATE THE REPORT ANDD ANALYTICS COMBINIG DIFFERENT DATASETS.
+
+TYPES OF JOINS: DIFFERENT TYPES OF JOINS 
+===============
+1. INNER JOIN ---> IT IS MATCHED RECORDS FROM BOTH TABLES
+2. LEFT JOIN (LEFT OUTER JOIN) ---> IT IS MATCHED RECORDS + LEFT TABLE RECORDS
+3. RIGHT JOIN ( RIGHT OUTER JOIN) ---> IT IS RECORDS + RIGHT TABLE RECORDS
+4. FULL JOIN  ----> IT IS INNER JOIN+RIGHT JOIN+LEFT JOIN
+5. CROSS JOIN ---> IT IS PERFORMS CARTESIAN PRODUCT
+
+1. INNER JOIN
+===============
+IT RETURNS THE ROWS THAT HEVE THE MATCHING VALUES IN BOTH VLAUES.
+SYNTAX:
+------
+SELECT COLUMNS
+FROM TABLE 1
+INNER JOIN TABLE 2
+ON TABLE1.COMMON-COLUMN=TABLE.COMMON-COLUMN;
+
+2. LEFT JOIN
+==================
+ IT IS RETURNS ALL THE ROWS THE LEFT TABLE AND MATCHED ROWS FROM THE RIGHT TABLE. IF NO MATCH NULL VALUES APPER FOTR THE RIGHT TABLE COLUMNS.
+
+SYNTAX:
+------
+SELECT COLUMNS
+FROM TABLE 1
+LEFT JOIN TABLE 2
+ON TABLE1.COMMON-COLUMN=TABLE.COMMON-COLUMN;
+
+3. RIGHT JOIN
+==================
+ IT IS RETURNS ALL THE ROWS THE RIGHT TABLE AND MATCHED ROWS FROM THE LEFT TABLE. IF NO MATCH NULL VALUES APPER FOTR THE LEFT TABLR COLUMNS.
+
+SYNTAX:
+------
+SELECT COLUMNS
+FROM TABLE 1
+RIGHT JOIN TABLE 2
+ON TABLE1.COMMON-COLUMN=TABLE.COMMON-COLUMN;
+
+4. FULL JOIN
+=================
+ IT IS TO SIMULATE USE THE UNION OF LEFT JOIN AND RIGHT JOIN.
+SYNTAX:
+-----------
+SELECT COLUMNS
+FROM TABLE 1
+LEFT JOIN TABLE 2
+ON TABLE1.COMMON-COLUMN=TABLE.COMMON-COLUMN;
+UNION
+SELECT COLUMNS
+FROM TABLE 1
+RIGHT JOIN TABLE 2
+ON TABLE1.COMMON-COLUMN=TABLE.COMMON-COLUMN;
+
+5.CROSS JOIN
+==============
+IT RETURNS THE CARTESIAN PRODUCT IN EVERY FIRST TABLE WITH EVERY ROW FROM THE SECOND TABLE.
+
+SELECT COLUMNS
+FROM TABLE1
+CROSS JOIN TABLE2;
+
+EXAMPLES:
+mysql> CREATE TABLE TAB1(NUMID INT);
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> CREATE TABLE TAB2(NUMID INT);
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> INSERT INTO TAB1 VALUES(10),(11),(12),(13),(14),(15);
+Query OK, 6 rows affected (0.06 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO TAB2 VALUES(11),(12),(13),(14),(15),(16);
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO TAB2 VALUES(11),(12),(13),(14);
+Query OK, 4 rows affected (0.06 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM TAB1;
++-------+
+| NUMID |
++-------+
+|    10 |
+|    11 |
+|    12 |
+|    13 |
+|    14 |
+|    15 |
++-------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT*FROM TAB2:
+    -> ^C
+mysql>  SELECT*FROM TAB2;
++-------+
+| NUMID |
++-------+
+|    11 |
+|    12 |
+|    13 |
+|    14 |
+|    15 |
+|    16 |
+|    11 |
+|    12 |
+|    13 |
+|    14 |
++-------+
+10 rows in set (0.00 sec)
+
+mysql> DROP TABLE FROM
+
+
+
+
+2 EMAMPLES:
+mysql> select*from employees;
++--------+---------+---------------+----------+
+| emp_id | name    | department_id | salary   |
++--------+---------+---------------+----------+
+|    101 | Arjun   |             1 | 50000.00 |
+|    102 | Bhavana |             2 | 65000.00 |
+|    103 | Charan  |             2 | 72000.00 |
+|    104 | Divya   |             3 | 45000.00 |
+|    105 | Eswar   |          NULL | 40000.00 |
+|    106 | Farhan  |             4 | 55000.00 |
+|    107 | Gowri   |             2 | 62000.00 |
+|    108 | Harish  |             5 | 48000.00 |
+|    109 | Ishita  |          NULL | 53000.00 |
+|    110 | Jagan   |             3 | 60000.00 |
++--------+---------+---------------+----------+
+10 rows in set (0.00 sec)
+
+mysql> select*from departments;
++---------------+-----------------+
+| department_id | department_name |
++---------------+-----------------+
+|             1 | Human Resources |
+|             2 | Engineering     |
+|             3 | Marketing       |
+|             4 | Finance         |
+|             5 | Operations      |
++---------------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> select*from projects;
++------------+----------------------+--------+
+| project_id | project_name         | emp_id |
++------------+----------------------+--------+
+|        201 | Website Redesign     |    102 |
+|        202 | Mobile Banking App   |    103 |
+|        203 | Marketing Campaign   |    104 |
+|        204 | Payroll System       |    106 |
+|        205 | Backend Optimization |    107 |
+|        206 | Cloud Migration      |    102 |
+|        207 | Customer Analytics   |    110 |
+|        208 | Inventory System     |   NULL |
++------------+----------------------+--------+
+ ^C
+ SELECT E.EMP_ID, E.NAME,D.DEPARTMENT_NAME FROM EMPLOYEES E
+ LEFT JOIN DEPARTMENTS D ON E.DEPARTMENT_ID D.DEPARTMENT_ID WHERE DEPARTMENT_NAME IS NULL ;
+
+SELECT E.EMP_ID, E.NAME,D.DEPARTMENT_NAME
+     FROM EMPLOYEES E
+     LEFT JOIN DEPARTMENTS D
+     ON E.DEPARTMENT_ID= D.DEPARTMENT_ID
+     WHERE PROJECTS_NAME IS NULL 
+
+SELECT E.NAME,D.DEPARTMENT_NAME FROM EMPLOYEES E LEFT JOIN DEPARTMENTS D ON E.DEPARTMENT_ID=D.DEPARTMENT_ID
+UNION
+SELECT E.NAME,D.DEPARTMENT_NAME FROM EMPLOYEES E RIGHT JOIN DEPARTMENTS D ON E.DEPARTMENT_ID=D.DEPARTMENT_ID;
+
++---------+-----------------+
+| NAME    | DEPARTMENT_NAME |
++---------+-----------------+
+| Arjun   | Human Resources |
+| Bhavana | Engineering     |
+| Charan  | Engineering     |
+| Divya   | Marketing       |
+| Eswar   | NULL            |
+| Farhan  | Finance         |
+| Gowri   | Engineering     |
+| Harish  | Operations      |
+| Ishita  | NULL            |
+| Jagan   | Marketing       |
++---------+-----------------+
+
+TOTAL SALARY PER DEPARTMENTS;
+SELECT D.DEPARTMENT_NAME,COUNT(E.EMP_ID)AS TOTAL_EMPLOYEES
+     FROM DEPARTMENTS D
+     LEFT JOIN EMPLOYEES E
+     ON D. DEPARTMENT_ID=E.DEPARTMENT_ID
+     GROUP BY D.DEPARTMENT_NAME
+ 
+     ORDER BY TOTAL_EMPLOYEES DESC;
+     
+SELECT D.DEPARTMENT_NAME,COUNT(E.EMP_ID)AS TOTAL_SALARY
+     FROM DEPARTMENTS D
+     LEFT JOIN SALARY E
+     ON D. DEPARTMENT_ID=E.DEPARTMENT_ID
+     GROUP BY D.DEPARTMENT_NAME
+     HAVING TOTAL_SALARY>50000
+     ORDER BY TOTAL_SALARY ASC;
+     
+
+
+
+
+
+
+
+ 
