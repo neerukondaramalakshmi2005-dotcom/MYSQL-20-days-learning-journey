@@ -1,0 +1,64 @@
+HOW TO OPEN COMMAND LINE WITH NEW USER:
+---------------------------------------
+OPEN PC -> GO TO C-DRIVE -> PROGRAM FILES -> MYSQL -> MYSQL SERVER 8.0 -> BIN.
+C:\Program Files\MySQL\MySQL Server 8.0\bin
+SELECT PATH -> REMOVE PATH -> ENTER CMD
+ENTER --> MYSQL -U 'USERNAME' -P
+ENTER --> PASSWORD
+
+--------------------------------------------------------------------------------------------------------
+AUTO_INCREMENT in MySQL:
+------------------------
+--> AUTO_INCREMENT is used to automatically generate a unique number for a column whenever a new record is inserted.
+--> It is commonly used with an INT primary key such as id.
+
+EXAMPLE:
+--------
+CREATE TABLE STUDENTS(STUDENT_ID INT AUTO_INCREMENT PRIMARY KEY, NAME VARCHAR(50), AGE INT );
+
+--> Here MYSQL automatically generates a unique value to STUDENT_ID and increment by 1 to every record.
+
+INSERT INTO students (name, age) VALUES ('Ravi', 22);
+
+INSERT INTO students (name, age) VALUES ('Priya', 21);
+
+INSERT INTO students (name, age) VALUES ('Arjun', 23);
+
+OUTPUT TABLE:
+-------------
+STUDENT_ID	NAME	AGE
+1		Ravi	22
+2		Priya	21
+3		Arjun	23
+
+----------------------------------------------------------------------------------------------------------
+Computed Columns in MySQL:
+--------------------------
+--> A computed column (also called a generated column) is a column whose value is automatically calculated from other columns in the same table.
+--> Instead of manually inserting a value, MySQL calculates it using an expression.
+
+EXAMPLE:
+--------
+CREATE TABLE PRODUCTS(PID INT,PNAME VARCHAR(20),PRICE DECIMAL(10,2),QUANTITY INT, TOTAL_AMOUNT DECIMAL(10,2)GENERATED ALWAYS AS (PRICE * QUANTITY) STORED );
+
+--> Here MYSQL automatically generates the value of TOTAL_AMOUNT column based on the values of PRICE and QUANTITY.
+
+INSERT INTO PRODUCTS(PID,PNAME,PRICE,QUANTITY)VALUES(111,'EARPHONE',999.99,2);
+
+INSERT INTO PRODUCTS(PID,PNAME,PRICE,QUANTITY)VALUES(222,'POWERBANK',1499.99,4);
+
+INSERT INTO PRODUCTS(PID,PNAME,PRICE,QUANTITY)VALUES(333,'MOBILE',19999.99,3);
+
+OUTPUT TABLE:
+-------------
+		
+PID	PNAME		PRICE		QUANTITY	TOTAL_AMOUNT
+111	EARPHONE	999.99		2		1999.98
+222	POWERBANK	1499.99		4		5999.96
+333	MOBILE		19999.99	3		59999.97
+
+--> If we update the PRICE or QUANTITY of any product then TOTAL_AMOUNT automatically updated.
+------------------------------------------------------------------------------------------------------------
+
+
+

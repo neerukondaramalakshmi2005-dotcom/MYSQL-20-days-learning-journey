@@ -1,0 +1,118 @@
+Day-2:
+------
+
+Client-server:
+-------------
+
+client : the role of the client in client-server architecture is to send requests to the server. and to get a response from the server.
+--------
+
+Server : - server is software the role of the server in client-server arch is to take requests from clients.
+--------
+if the request is a valid request then it will generate some response we can handover that response to the client. If the client request is not a valid request then it will raise the errors.
+
+
+protocol :- it has a set of rules and regulations. The role of the protocol in client-server arch is to send requests from client to server.
+---------
+
+Data Models In DBMS
+
+=========================
+
+def : a Data Model defines how data is stored, organized, and manipulated in a database.
+
+
+1. Physical Data Model:
+-----------------------
+
+def: describes how data is physically stored in storage devices.
+
+
+Audience :  Database administrators.
+
+
+2. Logical Data Model:
+---------------------
+
+defines the structure of data (entities,attributes,relationships) independent of physical storage areas.
+
+
+Audience : Developers and data architects.
+
+
+3. Hierarchal Data Model :
+--------------------------
+
+data is represented as tree Structure(parent child relationship)
+
+example :- company-->departments-->employees
+
+
+4. Network Data Model :
+-----------------------
+
+Data is represented as graph with records(nodes)and relationships(edges)
+
+
+example : student enrolled in multiple courses, courses tough by multiple professors.
+
+
+5. Relational Data Models(RDBMS):
+--------------------------------
+
+data is stored in tables(relations)with rows(tuples)and columns(attributes)
+
+
+example:
+-------
+
+student(id,name,marks,age,dept_id)
+
+department(dept_id,dept_name)
+
+
+6. Entity Relationship(E-R Model):
+---------------------------------
+
+a conceptual model that shows entities(things),attributes(properties)and relationships
+
+
+SQL Identifiers:
+================
+
+SQL identifiers are names used to identify database objects such as.
+
+Database names, Table names, Column names, view names, index names, constraints, triggers, stored procedures.
+
+While we are declaring an identifier we have to follow some rules and regulations.
+
+1. the only allowed characters to declare identifiers a-z or A-Z or 0-9,_,$
+
+2. must begin with a letter or underscore(_).
+
+3. we can't declare identifiers with reserved keywords.
+
+4. spaces are not considered to declare identifiers.
+
+5. identifiers are case sensitive
+
+6. max length to declare identifiers are 15 characters.
+
+
+MySQL Installation:
+==================
+
+https://dev.mysql.com/downloads/installer/
+
+1.MySQL Installation – Windows
+2.Download MySQL Installer.
+3.Run the installer.
+4.Select Developer Default.
+5.Click Execute to install.
+6.Set Root Password.
+7.Configure MySQL Server as a Windows Service.
+8.Click Execute → Finish.
+9.Open MySQL Workbench.
+10.Connect using your root password.
+Run SELECT VERSION(); to verify. ✅
+

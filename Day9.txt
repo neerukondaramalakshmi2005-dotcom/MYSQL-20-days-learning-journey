@@ -1,0 +1,188 @@
+Clauses:
+clauses are used to control how data is selected, filtered, grouped, sorted or modified 
+in SQL queries.
+
+Think of clauses like instructions given in the database
+
+Where clause:
+
+filter records based on specified conditions where clause can be used as comparison operators,
+logical operators.... etc
+syntax:
+select column1,column2....
+from table
+where condition;
+
+group by clause:
+
+The group by clause is used to group rows having the same values in one or more
+columns. It is commonly used with aggregate functions such as 
+sum(), min(), max(),avg(),count()
+syntax:
+select column-name aggregate-function(column-name)
+from table-name
+groupby column-name;
+
+Having clause:
+The having clause is used to filter grouped records after group by clause. It is similar to where 
+but it works on grouped instead of individual rows.
+
+Syntax:
+select column-name,
+aggregate function(column-name)
+from table-name group by column-name having condition;
+
+Orderby clause:
+The order by clause is used to sort the result set in ascending order(ASC) or 
+descending order(DESC) order
+
+asc---ascending order
+dsc---descending order
+
+syntax:
+select column-name
+from table-name
+order by column-name asc;
+
+CREATE TABLE STUDENTS (
+    StudentID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(50),
+    Age INT,
+    Department VARCHAR(30),
+    Marks INT,
+    City VARCHAR(30)
+);
+
+---- Insert Sample Data (without StudentID)
+INSERT INTO STUDENTS (Name, Age, Department, Marks, City) VALUES
+('Anil', 20, 'CSE', 85, 'Hyderabad'),
+('Sneha', 22, 'ECE', 75, 'Mumbai'),
+('Ravi', 20, 'CSE', NULL, 'Hyderabad'),
+('Divya', 23, 'MECH', 65, NULL),
+('Kiran', 22, 'ECE', 75, 'Pune'),
+('Varun', 21, 'CSE', 92, 'Chennai'),
+('Priya', 20, 'EEE', 88, 'Delhi'),
+('John', 22, 'MECH', 55, 'Mumbai'),
+('Rekha', 21, 'ECE', 75, 'Pune'),
+('Ramesh', 23, 'EEE', NULL, 'Delhi');
+
+select*from students;
+
+
+SELECT DEPARTMENT,SUM(MARKS) AS TOTAL_MARKS_DEPT
+FROM STUDENTS
+GROUP BY DEPARTMENT;
+
+SELECT DEPARTMENT,MIN(MARKS)AS LOWEST_MARKS
+FROM STUDENTS
+GROUP BY DEPARTMENT
+HAVING MIN(MARKS)>60;
+
+
+SELECT DEPARTMENT
+AVG(MARKS)AS AVERAGE_MARKS
+FROM STUDENTS
+WHERE AGE>20
+GROUP BY DEPARTMENT
+HAVING AVERAGE_MARKS>70
+ORDER BY AVERAGE_MARKS DESC;
+
+SELECT CITY,
+COUNT(*) AS TOTAL_STUDENTS
+FROM STUDENTS
+WHERE MARKS>70
+GROUP BY CITY
+HAVING TOTAL_STUDENTS > 1
+ORDER BY TOTAL_STUDENTS;
+
+SELECT DEPARTMENT,
+AVG(AGE) AS AVG_AGE
+FROM STUDENTS
+WHERE CITY IS NOT NULL
+GROUP BY DEPARTMENT
+HAVING AVG_AGE>20
+ORDER BY DEPARTMENT;
+
+ CREATE TABLE sales (
+    ->    sale_id INT PRIMARY KEY,
+    ->    product VARCHAR(50),
+    ->    category VARCHAR(50),
+    ->    units_sold INT,
+    ->    unit_price INT,
+    ->    region VARCHAR(50)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql>
+mysql> INSERT INTO sales (sale_id, product, category, units_sold, unit_price, region) VALUES
+    -> (1,  'Keyboard',    'Electronics', 10, 1200,  'North'),
+    -> (2,  'Monitor',     'Electronics', 5,  7000,  'South'),
+    -> (3,  'Chair',       'Furniture',   15, 2500,  'North'),
+    -> (4,  'Desk',        'Furniture',   7,  4500,  'West'),
+    -> (5,  'Mouse',       'Electronics', 20, 800,   'East'),
+    -> (6,  'Sofa',        'Furniture',   3,  15000, 'South'),
+    -> (7,  'Headphones',  'Electronics', 8,  1800,  'North'),
+    -> (8,  'Laptop',      'Electronics', 6,  55000, 'West'),
+    -> (9,  'Table',       'Furniture',   12, 6000,  'East'),
+    -> (10, 'Fan',         'HomeAppliance', 18, 3000, 'South'),
+    -> (11, 'AC',          'HomeAppliance', 4, 35000, 'North'),
+    -> (12, 'Cupboard',    'Furniture',   5, 12000, 'West'),
+    -> (13, 'Printer',     'Electronics', 9, 9000,  'East'),
+    -> (14, 'Bed',         'Furniture',   2, 25000, 'South'),
+    -> (15, 'Mobile',      'Electronics', 14, 20000, 'North');
+
+SELECT REGION,SUM(UNIT_PRICE)AS TOTAL_REVENUE
+FROM SALES
+GROUP BY REGION
+HAVING TOTAL_REVENUE>50000;
+
+SELECT CATEGORY,COUNT(*)AS TOTAL_PRODUCTS
+FROM SALES
+GROUP BY CATEGORY
+HAVING TOTAL_PRODUCTS>2;
+
+SELECT CATEGORY,AVG(UNIT_PRICE)AS AVG_PRICE
+FROM SALES
+GROUP BY CATEGORY
+HAVING AVG_PRICE<50000;
+
+SELECT REGION,SUM(UNIT_PRICE)AS TOTAL_REVENUE
+FROM SALES
+GROUP BY REGION
+HAVING TOTAL_REVENUE>20000
+ORDER BY REGION DESC;
+
+SELECT CATEGORY,SUM(UNITS_SOLD)AS TOTAL_UNITS
+FROM SALES
+GROUP BY CATEGORY
+HAVING TOTAL_UNITS>10
+ORDER BY CATEGORY;
+
+SELECT CATEGORY,COUNT(*)AS TOTAL_PRODUCTS
+FROM SALES
+GROUP BY CATEGORY
+HAVING TOTAL_PRODUCTS>1
+ORDER BY CATEGORY;
+
+SELECT CATEGORY,AVG(UNIT_PRICE)AS TOTAL_AVG
+FROM SALES
+GROUP BY CATEGORY
+HAVING TOTAL_AVG<6000
+ORDER BY CATEGORY;
+
+SELECT CATEGORY,AVG(UNITS_SOLD)AS TOTAL_AVG
+FROM SALES
+GROUP BY CATEGORY
+HAVING TOTAL_AVG>5
+ORDER BY CATEGORY DESC;
+
+SELECT CATEGORY,SUM(UNITS_SOLD)AS TOTAL_SUM
+FROM SALES
+GROUP BY CATEGORY
+HAVING TOTAL_SUM
+ORDER BY CATEGORY DESC,UNITS_SOLD DESC;
+
+
+
+
+

@@ -1,0 +1,71 @@
+SQL:
+----
+-->Structured query language is standardized programming language specially designed for managing and manipulating relational databases.it provides declarative syntax that allows users to define data they want retrieve, insert, update or delete without specifying exactly how database should execute these operations.
+
+SQL Commands:
+-------------
+DDL: Data Definition Language -> Defines and modifies structure of a database objects(tables, schemas, indexes)
+
+DML: Data Manipulation Language -> Manages data stores with in database objects (insert, update, delete)
+
+DQL: Data Query Language -> Used to fetch/retrieve data from database.
+
+TCL: Transaction Control Language -> Manage Transactions to maintain data integrity
+
+DCL: Data Control Language -> Manage permissions and access control on database objects.
+
+SOME IMPORTANT COMMANDS:
+------------------------
+TO SEE DATABASES --> SHOW DATABASES;
+TO SEE TABLE STRUCTURE --> DESC TABLE_NAME;
+TO USE DATABASE --> USE DATABASE_NAME;
+
+DDL Commands:
+-------------
+1.CREATE: 
+---------
+--> Used to create N number of things like (database, table, trigger, etc...)
+
+Database --> syntax --> CREATE DATABASE DATABASE_NAME;
+Table --> syntax --> CREATE TABLE TABLE_NAME(FIELD_NAME DATATYPE(SIZE),FIELD_NAME DATATYPE(SIZE),....);
+------------------------------------------------------------------
+2.ALTER:
+-------
+--> Used to modify the columns in the table.
+-->Modifies the structure of an existing database object, such as adding, deleting, or modifying columns in a table. 
+
+To add column --> ALTER TABLE TABLE_NAME ADD COLUMN_NAME DATATYPE(SIZE);
+
+To drop column --> ALTER TABLE TABLE_NAME DROP COLUMN COLUMN_NAME;
+
+To change datatype or size of column --> ALTER TABLE TABLE_NAME MODIFY COLUMN_NAME DATATYPE(SIZE);
+
+To rename column name --> ALTER TABLE TABLE_NAME CHANGE COLUMN OLD_NAME NEW_NAME DATATYPE(SIZE);
+
+TO change Table Name --> ALTER TABLE OLD_TABLE_NAME RENAME TO NEW_TABLE_NAME;
+
+-------------------------------------------------------------------
+3.TRUNCATE:
+-----------
+-->Removes all rows/records from a table quickly while keeping the table structure intact for future use. Faster than DELETE as it does not log individual row deletions.
+
+SYNTAX --> TRUNCATE TABLE TABLE_NAME;
+EXAMPLE --> TRUNCATE TABLE EMPLOYEES;
+------------------------------------------------------------------------
+4.RENAME:
+---------
+-->Renames an existing database object, such as a table or column, to a new name without changing its structure or data.
+
+To rename table --> ALTER TABLE OLD_TABLE_NAME RENAME TO NEW_TABLE_NAME;
+
+To rename column --> ALTER TABLE TABLE_NAME CHANGE COLUMN OLD_NAME NEW_NAME DATATYPE(SIZE);
+-------------------------------------------------------------------------
+5.DROP:
+-------
+-->Permanently deletes an existing database object (table, database, index, view) along with all its data and structure. This action cannot be rolled back in most databases.
+
+To drop column --> ALTER TABLE TABLE_NAME DROP COLUMN COLUMN_NAME;
+
+To drop table --> DROP TABLE TABLE_NAME;
+---------------------------------------------------------------------------------
+
