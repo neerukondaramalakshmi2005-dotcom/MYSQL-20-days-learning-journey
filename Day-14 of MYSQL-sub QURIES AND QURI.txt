@@ -1,0 +1,486 @@
+Day-14 of MYSQL-sub QURIES AND QURIES
+
+WHAT IS SUBQUERIES?
+A sub query is a query inside another query.
+It is written inside a parantisis() and its is used to outer query.
+it is also called as 
+inner query
+nested query
+inner select.
+
+General syntax:
+================
+select column-list
+from table
+where column operator(select column from table where condition):
+ 
+purpose of subquery:
+==================
+To breakdown complex problems into smaller query.
+To use the result of one query as input to another.
+To avoid the multiple steps (write in a single query instead of temp tables)
+
+Types of subqueries:
+================
+1. Single row subquery
+2. multi-row subquery
+3.nested subquery
+4. corelated 
+5.exists/not exists subquery
+
+
+1. Single row subquery
+======================
+single row subqueries returns exactly  is one row and  columns . they use the comparision operator like =,<,<=,>,>=,!=
+
+characteries
+===========
+returns only one value.
+can use single value comparisons operators
+
+syntax:
+=============
+select column
+from table
+where column operator (select column from table where condition):
+
+EXAMPLES:
+1.
+find the country of largest population:
+    -> using single row subquery:
+    -> ^C
+ SELECT NAME,POPULATION
+ FROM COUNTRY
+ WHERE POPULATION=(SELECT MAX(POPULATION)FROM COUNTRY);
++-------+------------+
+| NAME  | POPULATION |
++-------+------------+
+| India | 1428000000 |
++-------+------------+
+1 row in set (0.01 sec)
+
+
+2.
+
+mysql> FIND THE COUNTRY WITH POPULATION GREATER THAN CHINA'S POPULATION:
+    '>
+    '> SINGLE ROW SUBQUERY:
+    '>
+    '> ^C
+ SELECT NAME,POPULATION
+ FROM COUNTRY
+ WHERE POPULATION>(SELECT POPULATION FROM COUNTRY WHERE NAME='CHINA');
++-------+------------+
+| NAME  | POPULATION |
++-------+------------+
+| India | 1428000000 |
++-------+------------+
+
+
+
+2. multi-row subquery
+======================
+ * Multi-Rows subqueries(IN)
+----------------
+A multi-row subquery returns more than one row ,then the in operator is used the where you want the compare a value with multiple values returned  by the subquery.
+
+characteristics:
+-----------
+returns multiple rows.
+uses the IN operator
+checks the weather a value of exists in the list returned by the subquery.
+equalist to multiple or condition.
+most commonly used for matching values.
+
+syntax:
+----------
+
+Select Columns from table
+where column ANY/SOME(select column from table where condition);
+
+
+
+mysql> SELECT NAME,POPULATION
+    ->  FROM COUNTRY
+    ->  WHERE POPULATION>(SELECT POPULATION FROM COUNTRY WHERE NAME='UNITED STATES');
++-------+------------+
+| NAME  | POPULATION |
++-------+------------+
+| China | 1412000000 |
+| India | 1428000000 |
++-------+------------+
+2 rows in set (0.00 sec)
+
+4.
+
+SELECT C.NAME,C.POPULATION FROM CITY C WHERE C.ID=(SELECT CAPITAL FROM COUNTRY WHERE NAME='BRAZIL');
++----------+------------+
+| NAME     | POPULATION |
++----------+------------+
+| Brasilia |    3100000 |
+
+ * Multi-Rows subquery(ANY/SOME)
+=============================
+multi rows are subqueries returns the multiple values or rows when the using any or some, the condition is true if the matches at least one values returned the by the subquery.
+
+characteries
+----------
+returns the multiple values.
+ANY and SOME are interchangeable condition is true if the value is satisfy the condition.
+often used with IN>ANY>,<ANY,=ANY..ETC
+
+syntax:
+==========
+ Columns from table
+where column IN(select column from table where condition);
+
+* Multi-Row subquery(ALL)
+==================
+The all operator means the condition must be true for all values return by the subquery.
+
+
+Characteristics :
+------------------
+
+--> Condition must be true for all values in the subquery result
+--> Often userd with>ALL,<ALL,=ALL,<=ALL
+--> >ALL means greater than the max value
+--> <All means less than the minimum values
+
+SYNTAX:
+---------
+Select Columns from table
+where column IN(select column from table where condition);
+
+
+3. nested subquery:
+==================
+
+
+characterizes 
+--------------
+Multiple level of nesting.
+inner queries execute first.
+can combine different types of sunqueries.
+useful for complex conditions
+syntax:
+------
+SELECT column_list
+FROM table 
+WHERE column = (SELECT COLUMN
+                FROM TABLE
+                WHERE COLUMN = ( SELECT COLUMN
+                                 FROM TABLE
+                                 WHERE CONDITIONS));
+
+
+mysql> NESTED SUBQUERY:
+    -> MAX SALARY EMPLOYEE:
+    -> ^C
+mysql>  SELECT MAX(SALARY)AS MAX_SALARY FROM EMPLOYEE;
++------------+
+| MAX_SALARY |
++------------+
+|   95000.00 |
++------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT MAX(SALARY)AS SECOND_MAX
+    -> FROM EMPLOYEE WHERE SALARY<(SELECT MAX(SALARY)FROM EMPLOYEE);
++------------+
+| SECOND_MAX |
++------------+
+|   90000.00 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(SALARY)AS THIRD_MAX
+    -> FROM EMPLOYEE WHERE SALARY<(SELECT MAX(SALARY)FROM EMPLOYEE WHERE SALARY<(SELECT MAX(SALARY)FROM EMPLOYEE));
++-----------+
+| THIRD_MAX |
++-----------+
+|  80000.00 |
++-----------+
+1 row in set (0.00 sec)
+
+
+4. Corlated subquery:
+=======================
+corelated subquries are subquries that refrence column from the outer query . unlike the regular subquries that execute the once, corelated subquries executes once fro m each row processed by the outer query.
+
+characterizes:
+----------------
+refrence column from the outer query
+executes multiple times (once per outer rows).
+cannot be executed the independently.
+often the with EXITS,NOT EXITS
+
+SYNTAX:
+------
+SELECT COLUMN 
+FROM TABLE
+WHERE CONDTION (SELECT COLUMN 
+FROM TABLE2 INNER ALIAS
+WHERE INNER -ALIAS.COLUMN= OUTER_ALIAS.COLUMN):
+
+SELECT EMP_NAME,SALARY
+    -> FROM EMPLOYEE E
+    -> WHERE SALARY>(SELECT AVG(SALARY)FROM EMPLOYEE WHERE DEPT_ID=E.DEPT_ID);
++----------+----------+
+| EMP_NAME | SALARY   |
++----------+----------+
+| Ravi     | 75000.00 |
+| Anjali   | 80000.00 |
+| Manoj    | 95000.00 |
++----------+----------+
+3 rows in set (0.00 sec)
+
+5. EXITS/NOT EXITS SUBQYERY:
+==========================
+EXITS is used to test whether a subquery any rows. it returns true  if the subquery returns at least one rows.false otherwise
+NOT EXITS returns true if the subquery returns no rows.
+
+
+characteristicS:
+------------
+returns TRUE/FALSE(Boolean rwsult)
+more efficient that in large datasents.
+often used the with co-related subquries.
+stops executs as the soon as first match is found.
+select clause is exits doesn't matter (often use SELECT 1).
+
+SYNTAX:
+------
+SELECT COLUMN
+FROM TABLE1
+WHERE EXITS(SELECT 1 FROM TABLE2 WHERE CONDITIONS);
+
+SELECT COLUMN
+FROM TABLE1
+WHERE EXITS(SELECT 1 FROM TABLE2 WHERE CONDITIONS);
+
+
+examples:
+select*from city ;
++----+------------------+-------------+------------------------------+------------+
+| ID | Name             | CountryCode | District                     | Population |
++----+------------------+-------------+------------------------------+------------+
+
+
+ country;
++------+----------------+---------------+---------------------------+------------+----------------+-------------+---------+
+| Code | Name           | Continent     | Region                    | Population | LifeExpectancy | GNP         | Capital |
++------+----------------+---------------+---------------------------+------------+----------------+-------------+---------+
+
+countrylanguage;
++-------------+------------------+------------+------------+
+| CountryCode | Language         | IsOfficial | Percentage |
++-------------+------------------+------------+------------+
+
+EXAMPLES:
+1.
+find the country of largest population:
+    -> using single row subquery:
+    -> ^C
+ SELECT NAME,POPULATION
+ FROM COUNTRY
+ WHERE POPULATION=(SELECT MAX(POPULATION)FROM COUNTRY);
++-------+------------+
+| NAME  | POPULATION |
++-------+------------+
+| India | 1428000000 |
++-------+------------+
+1 row in set (0.01 sec)
+
+
+2.
+
+mysql> FIND THE COUNTRY WITH POPULATION GREATER THAN CHINA'S POPULATION:
+    '>
+    '> SINGLE ROW SUBQUERY:
+    '>
+    '> ^C
+ SELECT NAME,POPULATION
+ FROM COUNTRY
+ WHERE POPULATION>(SELECT POPULATION FROM COUNTRY WHERE NAME='CHINA');
++-------+------------+
+| NAME  | POPULATION |
++-------+------------+
+| India | 1428000000 |
++-------+------------+
+
+
+3.
+
+mysql> SELECT NAME,POPULATION
+    ->  FROM COUNTRY
+    ->  WHERE POPULATION>(SELECT POPULATION FROM COUNTRY WHERE NAME='UNITED STATES');
++-------+------------+
+| NAME  | POPULATION |
++-------+------------+
+| China | 1412000000 |
+| India | 1428000000 |
++-------+------------+
+2 rows in set (0.00 sec)
+
+4.
+
+SELECT C.NAME,C.POPULATION FROM CITY C WHERE C.ID=(SELECT CAPITAL FROM COUNTRY WHERE NAME='BRAZIL');
++----------+------------+
+| NAME     | POPULATION |
++----------+------------+
+| Brasilia |    3100000 |
++----------+------------+
+
+5.SELECT NAME,POPULATION,CONTINENT
+     FROM COUNTRY
+     WHERE POPULATION>ANY(SELECT POPULATION FROM COUNTRY WHERE CONTINENT='EUROPE')
+     AND CONTINENT!='EUROPE';
+    
+6.
+mysql>     FIND CITIES WITH POPULATION GERATER THAN ANY CITY  IN USA
+    ->
+    -> ^C
+mysql> SELECT NAME,POPULATION,COUNTRYCODE
+    -> FROM CITY
+    -> WHERE POPULATION>ANY (SELECT POPULATION FROM CITY WHERE COUNTRYCODE='USA')
+    -> AND COUNTRYCODE!='USA';
++------------------+------------+-------------+
+| NAME             | POPULATION | COUNTRYCODE |
++------------------+------------+-------------+
+
+2.EXAMPLE:
+-- Department Table
+CREATE TABLE Department (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50),
+    location VARCHAR(50)
+);
+
+-- Employee Table
+CREATE TABLE Employee (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    salary DECIMAL(10,2),
+    dept_id INT,
+    job VARCHAR(50),
+    hire_date DATE,
+    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+);
+
+-- Project Table
+CREATE TABLE Project (
+    proj_id INT PRIMARY KEY,
+    proj_name VARCHAR(50),
+    dept_id INT,
+    budget DECIMAL(12,2),
+    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+);
+
+-- Departments
+INSERT INTO Department VALUES
+(1, 'HR', 'Hyderabad'),
+(2, 'IT', 'Bangalore'),
+(3, 'Finance', 'Mumbai'),
+(4, 'Marketing', 'Delhi');
+
+-- Employees
+INSERT INTO Employee VALUES
+(101, 'Amit', 60000, 2, 'Developer', '2021-06-12'),
+(102, 'Ravi', 75000, 2, 'Manager', '2020-03-15'),
+(103, 'Sneha', 55000, 1, 'HR Executive', '2022-01-20'),
+(104, 'Priya', 90000, 3, 'Accountant', '2019-07-10'),
+(105, 'Vikas', 50000, 4, 'Sales Exec', '2022-05-30'),
+(106, 'Anjali', 80000, 2, 'Developer', '2021-08-25'),
+(107, 'Manoj', 95000, 3, 'Manager', '2018-11-05');
+
+-- Projects
+INSERT INTO Project VALUES
+(201, 'ERP System', 2, 1500000),
+(202, 'Recruitment Drive', 1, 300000),
+(203, 'Annual Report', 3, 500000),
+(204, 'Ad Campaign', 4, 700000),
+(205, 'Mobile App', 2, 1200000);
+
+select*from employee;
+select*from project;
+select*from department;
+
+
+
+mysql> SELECT EMP_NAME,SALARY
+    -> FROM EMPLOYEE
+    -> WHERE SALARY>ANY(SELECT SALARY FROM EMPLOYEE WHERE DEPT_ID=2);
++----------+----------+
+| EMP_NAME | SALARY   |
++----------+----------+
+| Ravi     | 75000.00 |
+| Priya    | 90000.00 |
+| Anjali   | 80000.00 |
+| Manoj    | 95000.00 |
++----------+----------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT EMP_NAME,SALARY
+    -> FROM EMPLOYEE
+    ->  WHERE SALARY>ALL(SELECT SALARY FROM EMPLOYEE WHERE DEPT_ID=2);
++----------+----------+
+| EMP_NAME | SALARY   |
++----------+----------+
+| Priya    | 90000.00 |
+| Manoj    | 95000.00 |
++----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> NESTED SUBQUERY:
+    -> MAX SALARY EMPLOYEE:
+    -> ^C
+mysql>  SELECT MAX(SALARY)AS MAX_SALARY FROM EMPLOYEE;
++------------+
+| MAX_SALARY |
++------------+
+|   95000.00 |
++------------+
+
+
+mysql> SELECT MAX(SALARY)AS SECOND_MAX
+    -> FROM EMPLOYEE WHERE SALARY<(SELECT MAX(SALARY)FROM EMPLOYEE);
++------------+
+| SECOND_MAX |
++------------+
+|   90000.00 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(SALARY)AS THIRD_MAX
+    -> FROM EMPLOYEE WHERE SALARY<(SELECT MAX(SALARY)FROM EMPLOYEE WHERE SALARY<(SELECT MAX(SALARY)FROM EMPLOYEE));
++-----------+
+| THIRD_MAX |
++-----------+
+|  80000.00 |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> EMPLOYEES EARNING MORE THAN AVG SALARY OF THEIR DEPT.
+    -> ^C
+054 (42S22): Unknown column 'DAPT_ID' in 'where clause'
+mysql>  SELECT EMP_NAME,SALARY
+    -> FROM EMPLOYEE E
+    -> WHERE SALARY>(SELECT AVG(SALARY)FROM EMPLOYEE WHERE DEPT_ID=E.DEPT_ID);
++----------+----------+
+| EMP_NAME | SALARY   |
++----------+----------+
+| Ravi     | 75000.00 |
+| Anjali   | 80000.00 |
+| Manoj    | 95000.00 |
++----------+----------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+

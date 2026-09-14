@@ -1,0 +1,360 @@
+DAY-15 OF MYSQL-VIEWS,TCL
+
+1. WHAT IS VIEW ?
+===============
+A. A view is a virtual  table it is created from the result of MySQL query.
+   it is stored in select statement, it looks the behaves of like regular table when the query it 
+   you can select from it ,filter it , and join it, but it doesn't store the data 
+ 2. WHY DO WE NEED VIEWS?
+====================
+A. Simplify the complex queries: it Hide the multi-table joins, subqueries and calculation behind a single,simple table like name.
+  it resuse query logic: Write the complex select once reuse it anywhere ,reports applications,dashboard,without copy of pasting sql.
+Data security: expose only the specific columns or rows to certain users, without of granting them accessing to full base table.
+different perspectives of the same data : It is Different departments can have the their own taileerd views understialying table.
+logic and independence : If the iunderlying table structures changes slightly, you can often adjust the jud=st once.
+Simplifying reporting: pre-packages aggregations(total,averages,counts) into a view so business users can query them without knowing the sql.
+
+
+Advantages
+=============
+Security:
+---------
+ Resists access to sensitive columns(eg: salary) or sensitive rows(only a user own department)
+Simplicity:
+-------------
+ end of the users applications interest with simple named virtual table instead thecomplex sql.
+1. Reusability
+--------------
+A view can be created once and used many times instead of writing the same query repeatedly.
+2. Consistency
+--------------
+
+A view provides the same definition and logic whenever users access it.
+
+Example:
+If the company defines “IT employees” using one view, everyone gets the same filtered result.
+
+3. Maintainability
+------------------
+
+If a complex query needs to be changed, we can update the view instead of changing the query in many different applications or reports.
+
+Interview: “Views make SQL code easier to maintain because common logic can be centralized.”
+
+4. Custom Data Presentation
+---------------------------
+
+A view can show only the columns and rows required by a particular user or department.
+5. No Extra Storage Cost
+-------------------
+
+A normal view generally stores the query definition, not a separate copy of the underlying table data.
+
+Creating Viwes:
+===============
+syntax:
+------
+create view view_name as
+select columns
+from tables
+where conditions;
+
+
+Altering view:
+==============
+syntax:
+------
+alter view view_name as
+select new columns
+from new tables
+where new conditions;
+
+
+Dropping view:
+=================
+syntax
+-----
+drop view view_name;
+
+or 
+
+drop view if exists view_name;
+
+EXAMPLE:
+
+CREATE TABLE departments (
+	dept_id INT PRIMARY KEY AUTO_INCREMENT,
+	dept_name VARCHAR(50),
+	location VARCHAR(50)
+);
+ 
+CREATE TABLE employees (
+	emp_id INT PRIMARY KEY AUTO_INCREMENT,
+	emp_name VARCHAR(100),
+	dept_id INT,
+	designation VARCHAR(50),
+	salary DECIMAL(10,2),
+	join_date DATE,
+	FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+
+INSERT INTO departments (dept_name, location) VALUES
+('IT','Hyderabad'), ('HR','Bangalore'), ('Finance','Chennai'), ('Sales','Mumbai');
+ 
+INSERT INTO employees (emp_name, dept_id, designation, salary, join_date) VALUES
+('Rahul',1,'Software Engineer',55000,'2021-06-15'),
+('Anita',2,'HR Executive',38000,'2020-03-21'),
+('Suresh',4,'Sales Manager',52000,'2019-08-10'),
+('Priya',1,'Team Lead',65000,'2022-01-05'),
+('Kiran',3,'Finance Analyst',48000,'2018-12-11'),
+('Deepika',2,'HR Manager',60000,'2019-10-19');
+
+
+EXAMPLE 2 :
+----
+ 1. CREATE VIEW VW_EMPLOYEES_DEPARTMENTS AS
+SELECT E.EMP_ID,E.EMP_NAME,E.DESIGNATION,D.DEPT_NAME,D.LOCATION
+FROM EMPLOYEES E
+JOIN DEPARTMENTS D
+ON E.DEPT_ID=D.DEPT_ID;
+
+
+SELECT*FROM VW_EMPLOYEES_DEPARTMENT;
++--------+----------+-------------------+-----------+-----------+
+| EMP_ID | EMP_NAME | DESIGNATION       | DEPT_NAME | LOCATION  |
++--------+----------+-------------------+-----------+-----------+
+|      1 | Rahul    | Software Engineer | IT        | Hyderabad |
+|      4 | Priya    | Team Lead         | IT        | Hyderabad |
+|      2 | Anita    | HR Executive      | HR        | Bangalore |
+|      6 | Deepika  | HR Manager        | HR        | Bangalore |
+|      5 | Kiran    | Finance Analyst   | Finance   | Chennai   |
+|      3 | Suresh   | Sales Manager     | Sales     | Mumbai    |
++--------+----------+-------------------+-----------+-----------+
+6 rows in set (0.00 sec)
+
+SELECT* FROM DEPARTMENTS;
++---------+-----------+-----------+
+| dept_id | dept_name | location  |
++---------+-----------+-----------+
+|       1 | IT        | Hyderabad |
+|       2 | HR        | Bangalore |
+|       3 | Finance   | Chennai   |
+|       4 | Sales     | Mumbai    |
++---------+-----------+-----------+
+
+2. CREATE VIEW 
+VW_DEPARTMENTS_SALARY_SUMMARY AS
+SELECT D.DEPT_NAME,
+COUNT(E.EMP_ID)AS 
+TOTAL_EMPLOYEE,
+SUM(E.SALARY)AS TOTAL_SALARY,
+AVG(E.SALARY)AS AVERAGE_SALARY
+FROM EMPLOYEES E
+JOIN DEPARTMENTS D
+ ON E.DEPT_ID=D.DEPT_ID
+GROUP BY D.DEPT_NAME;
+
+
+SELECT*FROM VW_DEPARTMENTS_SALARY_SUMMARY;
+
++-----------+----------------+--------------+----------------+
+| DEPT_NAME | TOTAL_EMPLOYEE | TOTAL_SALARY | AVERAGE_SALARY |
++-----------+----------------+--------------+----------------+
+| IT        |              2 |    120000.00 |   60000.000000 |
+| HR        |              2 |     98000.00 |   49000.000000 |
+| Finance   |              1 |     48000.00 |   48000.000000 |
+| Sales     |              1 |     52000.00 |   52000.000000 |
++-----------+----------------+--------------+----------------+
+
+3. CREATE VIEW VW_IT_EMPLOYEES AS
+SELECT EMP_ID,EMP_NAME,DESIGNATION,DEPT_ID,SALARY
+FROM EMPLOYEES
+WHERE DEPT_ID=1
+WITH CHECK OPTION;
+
+INSERT INTO VW_IT_EMPLOYEES(EMP_NAME,DEPT_ID,DESIGNATION,SALARY)
+VALUES('VIJAY',1,'DEVOPS ENGINEER',5000);
+
+
+
+SELECT*FROM VW_IT_EMPLOYEES;
+
+SELECT*FROM VW_IT_EMPLOYEES;
++--------+----------+-------------------+---------+----------+
+| EMP_ID | EMP_NAME | DESIGNATION       | DEPT_ID | SALARY   |
++--------+----------+-------------------+---------+----------+
+|      1 | Rahul    | Software Engineer |       1 | 55000.00 |
+|      4 | Priya    | Team Lead         |       1 | 65000.00 |
+|      7 | VIJAY    | DEVOPS ENGINEER   |       1 |  5000.00 |
++--------+----------+-------------------+---------+----------+
+
+4. 
+CREATE VIEW VW_EMPLOYEE_ANNUAL_SALARY AS
+SELECT EMP_NAME,SALARY AS MONTHLY_SALARY,SALARY*12 AS ANNUAL_SALARY FROM EMPLOYEES;
+
+SELECT*FROM VW_EMPLOYEE_ANNUAL_SALARY;
++----------+----------------+---------------+
+| EMP_NAME | MONTHLY_SALARY | ANNUAL_SALARY |
++----------+----------------+---------------+
+| Rahul    |       55000.00 |     660000.00 |
+| Anita    |       38000.00 |     456000.00 |
+| Suresh   |       52000.00 |     624000.00 |
+| Priya    |       65000.00 |     780000.00 |
+| Kiran    |       48000.00 |     576000.00 |
+| Deepika  |       60000.00 |     720000.00 |
+| VIJAY    |        5000.00 |      60000.00 |
++----------+----------------+---------------+
+
+5.
+CREATE VIEW VW_HIGH_PAYING_DEPARTMENT AS
+  SELECT DEPT_NAME,AVERAGE_SALARY
+    FROM VW_DEPARTMENTS_SALARY_SUMMARY
+     WHERE AVERAGE_SALARY>50000;
+
+
+SELECT * FROM VW_HIGH_PAYING_DEPARTMENT;
+
++-----------+----------------+
+| DEPT_NAME | AVERAGE_SALARY |
++-----------+----------------+
+| Sales     |   52000.000000 |
++-----------+----------------+
+
+SELECT*FROM EMPLOYEES;
++--------+----------+---------+-------------------+----------+------------+
+| emp_id | emp_name | dept_id | designation       | salary   | join_date  |
++--------+----------+---------+-------------------+----------+------------+
+|      1 | Rahul    |       1 | Software Engineer | 55000.00 | 2021-06-15 |
+|      2 | Anita    |       2 | HR Executive      | 38000.00 | 2020-03-21 |
+|      3 | Suresh   |       4 | Sales Manager     | 52000.00 | 2019-08-10 |
+|      4 | Priya    |       1 | Team Lead         | 65000.00 | 2022-01-05 |
+|      5 | Kiran    |       3 | Finance Analyst   | 48000.00 | 2018-12-11 |
+|      6 | Deepika  |       2 | HR Manager        | 60000.00 | 2019-10-19 |
+|      7 | VIJAY    |       1 | DEVOPS ENGINEER   |  5000.00 | NULL       |
++--------+----------+---------+-------------------+----------+------------+
+7 rows in set (0.00 sec)
+
+6. UPDATE VW_IT_EMPLOYEES SET SALARY=60000 WHERE EMP_NAME='VIJAY';
+
+SELECT*FROM VW_IT_EMPLOYEES;
+
+
+ +--------+----------+-------------------+---------+----------+
+| EMP_ID | EMP_NAME | DESIGNATION       | DEPT_ID | SALARY   |
++--------+----------+-------------------+---------+----------+
+|      1 | Rahul    | Software Engineer |       1 | 55000.00 |
+|      4 | Priya    | Team Lead         |       1 | 65000.00 |
+|      7 | VIJAY    | DEVOPS ENGINEER   |       1 | 60000.00 |
++--------+----------+-------------------+---------+----------+
+SELECT*FROM EMPLOYEES;
+
+mysql> SELECT*FROM EMPLOYEES;
++--------+----------+---------+-------------------+----------+------------+
+| emp_id | emp_name | dept_id | designation       | salary   | join_date  |
++--------+----------+---------+-------------------+----------+------------+
+|      1 | Rahul    |       1 | Software Engineer | 55000.00 | 2021-06-15 |
+|      2 | Anita    |       2 | HR Executive      | 38000.00 | 2020-03-21 |
+|      3 | Suresh   |       4 | Sales Manager     | 52000.00 | 2019-08-10 |
+|      4 | Priya    |       1 | Team Lead         | 65000.00 | 2022-01-05 |
+|      5 | Kiran    |       3 | Finance Analyst   | 48000.00 | 2018-12-11 |
+|      6 | Deepika  |       2 | HR Manager        | 60000.00 | 2019-10-19 |
+|      7 | VIJAY    |       1 | DEVOPS ENGINEER   | 60000.00 | NULL       |
++--------+----------+---------+-------------------+----------+------------+
+7 rows in set (0.00 sec)
+
+SELECT*FROM VW_EMPLOYEE_DEPARTMENTS;
+
+
+7.
+ALTER VIEW VW_EMPLOYEE_DEPARTMENT AS
+SELECT E.EMP_ID,E.EMP_NAME,D.DEPT_NAME
+FROM EMPLOYEES E
+JOIN DEPARTMENTS D ON E.DEPT_ID=D.DEPT_ID;
+
+SELECT*FROM VW_EMPLOYEE_DEPARTMENT;
+
+8. 
+DROP VIEW VW_EMPLOYEE_DEPARTMENT;
+
+
+
+TCL (Transaction control language):
+==================================
+Transactions: The process of combining all related operation into a single units in executing them a according to the rule of "either all operations should succeed or none should succeed" is called the transaction management.
+
+Examples:
+-------
+funds transfer
+consider a money transfer from process between two accounts.
+
+1. Debit amount from the senders account
+2. credit amount into the receiver's account
+
+There are two types of transaction:
+
+1. local Transaction:
+--------------------
+In local transactions are all operations of a Transaction are executed on the same databases.
+
+examples:
+-------
+funds transfer from the account to another account where both account belong to the same bank.
+
+
+2.global Transaction
+-------------------------
+ A global Transactions ,operations  of a Transactions are executed on different databases.
+example:
+-------
+ funds transfer from one account to  another account where both accounts belongs to different banks.
+
+ INTERVIEW QUESTION:
+=================
+*** ACID PROPERTIES:
+===================
+A--> ATOMICITY (all are nothing) 
+C--> CONSISTENCY ( THE DATA BASE REMAINS IN A VALID DATA)after Transaction for valid data ) to success or failure)
+I--> ISOLATION ( multiple operations INTERFACE WITH EACH OTHER ) (ex: checking, process Transactions)
+D-->DURABILITY. ( to store the data) ( COMMITTED CHANGES ARE PERMANENT)
+
+
+CREATE TABLE STUDENTS(
+SNO INT PRIMARY KEY,
+SNAME VARCHAR(20),
+SEMAIL VARCHAR(20)
+);
+
+INSERT INTO STUDENTS VALUES(111,'RAMA','RAMA@CODEGNAN');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

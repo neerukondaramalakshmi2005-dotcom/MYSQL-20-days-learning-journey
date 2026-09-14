@@ -1,0 +1,97 @@
+ parent table
+ CREATE TABLE DEPARTMENTS(
+    
+ DEPT_ID INT PRIMARY KEY,
+ DEPT_NAME VARCHAR(30)
+);
+------> CHILD CLASS
+CREATE TABLE EMPLOYEE(
+EMP_ID INT PRIMARY KEY,
+NAME VARCHAR(100),
+DEPT_ID INT,
+FOREIGN KEY (DAPT_ID)
+REFERENCES DEPT (DAPT_ID)
+ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+INSERT INTO DEPARTMENTS VALUES
+(1,'IT'),
+(2,'HR');
+
+INSERT INTO EMPLOYEES VALUES
+(101, 'RAHUL', 1),
+(102, 'MANI', 1),
+(103, 'AMIT', 2),
+104, ' VARUN', 2);
+
+DELETE FROM DEPARTMENTS WHERE DEPT_ID = 1;
+UPDATE DEPARTMENTS SET DEPT_ID = 100 WHERE DEPT_ID = 2
+
+OPERATORS :
+
+mysql> CREATE TABLE Products (
+    ->  id INT,
+    ->  name VARCHAR(100),
+    ->  price DECIMAL(10,2),
+    ->  qty INT
+    ->  );
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> INSERT INTO Products VALUES
+    ->  (1, 'Pen', 10.00, 100),
+    ->  (2, 'Notebook', 25.00, 50),
+    ->  (3, 'Pencil', 5.00, 200),
+    ->  (4, 'Eraser', 3.00, 300),
+    ->  (5, 'Marker', 15.00, 80),
+    ->  (6, 'Scale', 20.00, 150),
+    ->  (7, 'Sharpener', 8.00, 120),
+    ->  (8, 'Geometry Box', 120.00, 40),
+    ->  (9, 'Sketch Pen', 60.00, 75),
+    ->  (10, 'Crayons', 90.00, 55);
+Query OK, 10 rows affected (0.06 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+
+
+ SELECT NAME, PRICE,(PRICE-5)AS PRICE_WITH_DISCOUNT FROM PRODUCTS;
+
+ SELECT NAME, PRICE,PRICE+(PRICE*0.12)AS PRICE_WITH_TAX FROM PRODUCTS;
++--------------+--------+----------------+
+| NAME         | PRICE  | PRICE_WITH_TAX |
++--------------+--------+----------------+
+| Pen          |  10.00 |        11.2000 |
+| Notebook     |  25.00 |        28.0000 |
+| Pencil       |   5.00 |         5.6000 |
+| Eraser       |   3.00 |         3.3600 |
+| Marker       |  15.00 |        16.8000 |
+| Scale        |  20.00 |        22.4000 |
+| Sharpener    |   8.00 |         8.9600 |
+| Geometry Box | 120.00 |       134.4000 |
+| Sketch Pen   |  60.00 |        67.2000 |
+| Crayons      |  90.00 |       100.8000 |
++--------------+--------+----------------+
+10 rows in set (0.00 sec)
+
+
+mysql> SELECT NAME, PRICE,(PRICE-5)AS PRICE_WITH_DISCOUNT FROM PRODUCTS;
++--------------+--------+---------------------+
+| NAME         | PRICE  | PRICE_WITH_DISCOUNT |
++--------------+--------+---------------------+
+| Pen          |  10.00 |                5.00 |
+| Notebook     |  25.00 |               20.00 |
+| Pencil       |   5.00 |                0.00 |
+| Eraser       |   3.00 |               -2.00 |
+| Marker       |  15.00 |               10.00 |
+| Scale        |  20.00 |               15.00 |
+| Sharpener    |   8.00 |                3.00 |
+| Geometry Box | 120.00 |              115.00 |
+| Sketch Pen   |  60.00 |               55.00 |
+| Crayons      |  90.00 |               85.00 |
++--------------+--------+---------------------+
+10 rows in set (0.00 sec)
+
+
+
+
+

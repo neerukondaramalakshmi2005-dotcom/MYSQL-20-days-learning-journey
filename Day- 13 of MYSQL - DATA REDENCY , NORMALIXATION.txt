@@ -1,0 +1,106 @@
+Day- 13 of MYSQL - DATA REDENCY , NORMILAZATION , ER(ENTITY RELATIONSHIP MODELS)
+
+DATA REDENCY :
+NORMILAZATION:
+ER(ENTITY REALTIONSHIP MIODEL) :
+
+
+
+
+mysql> CREATE TABLE student_details (
+    ->     student_id INT,
+    ->     student_name VARCHAR(50),
+    ->     courses VARCHAR(100),
+    ->     trainer VARCHAR(100),
+    ->     trainer_phones VARCHAR(100)
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql>
+mysql> INSERT INTO student_details
+    -> VALUES
+    -> (101, 'Ravi', 'Java, Python', 'Kumar, Ramesh', '9876543210, 9876543211'),
+    -> (102, 'Priya', 'Python, SQL', 'Ramesh, Suresh', '9876543211, 9876543212'),
+    -> (103, 'Arun', 'Java, SQL', 'Kumar, Suresh', '9876543210, 9876543212');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select*from student_details;
++------------+--------------+--------------+----------------+------------------------+
+| student_id | student_name | courses      | trainers       | trainer_phones         |
++------------+--------------+--------------+----------------+------------------------+
+|        101 | Ravi         | Java, Python | Kumar, Ramesh  | 9876543210, 9876543211 |
+|        102 | Priya        | Python, SQL  | Ramesh, Suresh | 9876543211, 9876543212 |
+|        103 | Arun         | Java, SQL    | Kumar, Suresh  | 9876543210, 9876543212 |
++------------+--------------+--------------+----------------+------------------------+
+3 rows in set (0.00 sec)
+
+ INSERT INTO STUDENT_COURSE_1NF
+     VALUES
+     (101,'RAVI','JAVA','KUMAR','9876543210'),
+     (101,'RAVI','PYTHON','RAMESH','9876543211'),
+     (102,'PRIYA', 'PYTHON','RAMESH','9876543211'),
+     (102,'PRIYA','SQL','SURESH','9876543212'),
+     (103,'ARUN','JAVA','KUMAR', '9876543210'),
+     (103,'ARUN','SQL','SURESH','9876543212');
+
+ SELECT*FROM STUDENT_COURSE_1NF; 
+#
+CREATE TABLE STUDENT_2NF(
+STUDENT_ID INT PRIMARY KEY,
+STUDENT_NAME VARCHAR(20));
+
+INSERT INTO STUDENT_2NF VALUES (101,'RAVI'),(102,'PRIYA'),(103,'ARUN');
+
+#
+CREATE TABLE STUDENT_COURSE_ENROLL_2NF(
+STUDENT_ID INT,
+COURSE VARCHAR(50),
+PRIMARY KET(STUDENT_ID,COURSE));
+
+
+INSERT INTO STUDENT_COURSE_ENROLL_2NF VALUES
+(101,'JAVA'),(101,'PYTHON'),(102,'PYTHON'),(102,'SQL'),(103,'JAVA'),(103,'SQL');
+
+#
+CREATE TABLE COURSE_TRAINER_2NF(
+COURSE VARCHAR(30) PRIMARY KEY,
+TRAINER VARCHAR(50),
+TRAINER_PHONE VARCHAR(15));
+
+INSERT INTO COURSE_TRAINER_2NF VALUES
+('JAVA','KUMAR','9876543210'),
+('PYTHON',''RAMESH','9876543211'),
+('SQL',SURESH','9876543212');
+#
+CREATE TABLE COURSE_TRAINER_3NF(
+COURSE VARCHAR(30)PRIMARY KEY,
+TRAINER VARCHAR(50));
+
+INSERT INTO COURSE_TRAINER_3NF VALUES
+('JAVA','KUMAR'),
+('PYTHON',RAMESH'),
+('SQL','SURESH');
+
+# 
+CREATE TABLE TRAINER_PHONE_3NF(
+TRAINER VARCHAR(30)PRIMARY KEY,
+TRAINER_PHONE VARCHAR(30));
+
+INSERT INTO TRAINER_PHONE_3NF VALUES
+('KUMAR','9876543210'),
+('RAMESH','9876543211'),
+('SURESH','9876543212');
+
+
+
+
+
+
+
+
+
+
+
+
+   

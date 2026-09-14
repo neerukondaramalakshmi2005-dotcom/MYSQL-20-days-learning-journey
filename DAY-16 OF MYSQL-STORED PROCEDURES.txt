@@ -1,0 +1,395 @@
+DAY-16 OF MYSQL-STORED PROCEDURES
+
+WHAT ARE STORED PROCEDURES?
+ A STORED PROCEDURES is a named ,precompiled collection of one or more SQL statements that is  stored inside the database can be executed(called) whenever the required.insted of sending a long block of SQL code from applications every time ,applications simply calls the STORED PROCEDURES
+ by name
+
+WHY USE STORED PROCEDURES
+
+PERFORMCE: precompiled and cached by the data bases engine soo repeated execution is faster than ending raw SQL each time
+reusability: Write the logic once, call if from maybe applications for scripts
+security: users can be granted EXECUTE permissions on a procedures without granting direct access to the underlying table
+Reduce network traffic: A single call statement replaces many lines of SQL sent over the network.
+Maintainability: Business logic is centralized in the databases so changes or made the in one place.
+Consistency: ensure the same validation/business rules are applied every time 
+
+
+CREATE PROCEDURE SYNTAX:
+==========================
+DECLIMITER//
+CREATE PROCEDURE PROCEDURE_NAME(
+                [ IN |OUT|INOUT] PARAMETER_NAME DATA_TYPE,.....
+)
+BEGIN
+   --------SQL STATEMENTS / LOGIN
+   -------- DECLARATION,CONDITIONS,LOOPS..ETC.
+END//
+DELIMITER;
+
+ADVANTAGES
+=========
+Faster execution after complication 
+reduce duplicates SQL.
+supports transactions, loops, conditions, variables, cursor ,and exception handlers
+easy maintains
+
+Disadvantages:
+==============
+debugging can be difficult
+vendor specific syntax
+complex PROCEDURE  may become hard to maintain
+
+IN Parameters
+============
+Definition:
+---------
+AN in parameters is used to pass a value into a stored PROCEDURE 
+the procedure can use the value , but changes the made to parameters inside the procedure not returned the caller
+
+
+syntax:
+-----------
+CREATE PROCEDURE PROCEDURE_NAME (IN PARAMETER_NAME DATA_TYPE)
+BEGIN
+    SQL STATEMENTS
+END;
+
+OUT PARAMETER
+================
+DEFINATION
+------------
+AN OUT PARAMETER is used to return value from a stored procedure to the caller.
+the caller provides the a variable to receive the result.
+
+stntax:
+----
+
+CREATE PROCEDURE procedure_name(OUT paramter_name datatype)
+BEGIN
+set paramter_name=value;
+END;
+
+
+----------------------
+SHOW PROCEDURE STATUS WHERE DB='COMPANYDB'
+
+----------------------
+====================================
+
+CREATE DATABASE companydb;
+
+USE companydb;
+
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    department VARCHAR(50),
+    salary DECIMAL(10,2),
+    experience INT,
+    city VARCHAR(50),
+    age INT
+);
+
+INSERT INTO employees
+VALUES
+(101, 'Ravi', 'IT', 45000, 2, 'Hyderabad', 24),
+(102, 'Kiran', 'HR', 40000, 3, 'Vijayawada', 27),
+(103, 'Suresh', 'IT', 55000, 5, 'Hyderabad', 30),
+(104, 'Anil', 'Sales', 35000, 1, 'Chennai', 23),
+(105, 'Priya', 'Finance', 60000, 6, 'Bangalore', 32),
+(106, 'Sneha', 'IT', 50000, 4, 'Vizag', 28),
+(107, 'Rahul', 'HR', 42000, 2, 'Hyderabad', 25),
+(108, 'Arjun', 'Sales', 38000, 3, 'Chennai', 26),
+(109, 'Divya', 'Finance', 65000, 7, 'Bangalore', 34),
+(110, 'Manoj', 'IT', 70000, 8, 'Hyderabad', 35);
+
+
+SELECT*FROM EMPLOYEES;
++--------+----------+------------+----------+------------+------------+------+
+| emp_id | emp_name | department | salary   | experience | city       | age  |
++--------+----------+------------+----------+------------+------------+------+
+|    101 | Ravi     | IT         | 45000.00 |          2 | Hyderabad  |   24 |
+|    102 | Kiran    | HR         | 40000.00 |          3 | Vijayawada |   27 |
+|    103 | Suresh   | IT         | 55000.00 |          5 | Hyderabad  |   30 |
+|    104 | Anil     | Sales      | 35000.00 |          1 | Chennai    |   23 |
+|    105 | Priya    | Finance    | 60000.00 |          6 | Bangalore  |   32 |
+|    106 | Sneha    | IT         | 50000.00 |          4 | Vizag      |   28 |
+|    107 | Rahul    | HR         | 42000.00 |          2 | Hyderabad  |   25 |
+|    108 | Arjun    | Sales      | 38000.00 |          3 | Chennai    |   26 |
+|    109 | Divya    | Finance    | 65000.00 |          7 | Bangalore  |   34 |
+|    110 | Manoj    | IT         | 70000.00 |          8 | Hyderabad  |   35 |
++--------+----------+------------+----------+------------+------------+------+
+
+===
+EXAMPLE 1:
+------
+
+DELIMITER //
+CREATE PROCEDURE GETALLEMPLOYEES()
+BEGIN
+SELECT*FROM EMPLOYEES;
+END //
+
+Query OK, 0 rows affected (0.06 sec)
+
+DELIMITER ;( # DELIMITER SPACE ;)
+
+mysql> CALL GETALLEMPLOYEES();
++--------+----------+------------+----------+------------+------------+------+
+| emp_id | emp_name | department | salary   | experience | city       | age  |
++--------+----------+------------+----------+------------+------------+------+
+|    101 | Ravi     | IT         | 45000.00 |          2 | Hyderabad  |   24 |
+|    102 | Kiran    | HR         | 40000.00 |          3 | Vijayawada |   27 |
+|    103 | Suresh   | IT         | 55000.00 |          5 | Hyderabad  |   30 |
+|    104 | Anil     | Sales      | 35000.00 |          1 | Chennai    |   23 |
+|    105 | Priya    | Finance    | 60000.00 |          6 | Bangalore  |   32 |
+|    106 | Sneha    | IT         | 50000.00 |          4 | Vizag      |   28 |
+|    107 | Rahul    | HR         | 42000.00 |          2 | Hyderabad  |   25 |
+|    108 | Arjun    | Sales      | 38000.00 |          3 | Chennai    |   26 |
+|    109 | Divya    | Finance    | 65000.00 |          7 | Bangalore  |   34 |
+|    110 | Manoj    | IT         | 70000.00 |          8 | Hyderabad  |   35 |
++--------+----------+------------+----------+------------+------------+------+
+
+EXAMPLE 2:
+--------
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE GETITEMPLOYEES()
+    -> BEGIN
+    -> SELECT*FROM EMPLOYEES WHERE DEPARTMENT="IT";
+    -> END //
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> DELIMITER ;
+mysql> CALL GETITEMPLOYEES();
++--------+----------+------------+----------+------------+-----------+------+
+| emp_id | emp_name | department | salary   | experience | city      | age  |
++--------+----------+------------+----------+------------+-----------+------+
+|    101 | Ravi     | IT         | 45000.00 |          2 | Hyderabad |   24 |
+|    103 | Suresh   | IT         | 55000.00 |          5 | Hyderabad |   30 |
+|    106 | Sneha    | IT         | 50000.00 |          4 | Vizag     |   28 |
+|    110 | Manoj    | IT         | 70000.00 |          8 | Hyderabad |   35 |
++--------+----------+------------+----------+------------+-----------+------+
+
+
+EXAMPLE 3:
+---
+DELIMITER //
+CREATE PROCEDURE ABOVEAVERAGESALARY()
+BEGIN
+SELECT*FROM EMPLOYEES WHERE SALARY>(SELECT AVG(SALARY)FROM EMPLOYEES);
+END //
+
+
+mysql> DELIMITER ;
+mysql> CALL ABOVEAVERAGESALARY();
++--------+----------+------------+----------+------------+-----------+------+
+| emp_id | emp_name | department | salary   | experience | city      | age  |
++--------+----------+------------+----------+------------+-----------+------+
+|    103 | Suresh   | IT         | 55000.00 |          5 | Hyderabad |   30 |
+|    105 | Priya    | Finance    | 60000.00 |          6 | Bangalore |   32 |
+|    109 | Divya    | Finance    | 65000.00 |          7 | Bangalore |   34 |
+|    110 | Manoj    | IT         | 70000.00 |          8 | Hyderabad |   35 |
++--------+----------+------------+----------+------------+-----------+------+
+4 rows in set (0.05 sec)
+
+Query OK, 0 rows affected (0.08 sec)
+
+
+EXAMPLE 4:
+----
+DELIMITER //
+ CREATE PROCEDURE getAvgsalary()
+      BEGIN
+        SELECT*FROM employees
+       WHERE salary >(SELECT AVG(salary)FROM employees);
+     END //
+Query OK, 0 rows affected (0.04 sec)
+
+ DELIMITER ;
+  CALL getAvgsalary();
+
++--------+----------+------------+----------+------------+-----------+------+
+| emp_id | emp_name | department | salary   | experience | city      | age  |
++--------+----------+------------+----------+------------+-----------+------+
+|    103 | Suresh   | IT         | 55000.00 |          5 | Hyderabad |   30 |
+|    105 | Priya    | Finance    | 60000.00 |          6 | Bangalore |   32 |
+|    109 | Divya    | Finance    | 65000.00 |          7 | Bangalore |   34 |
+|    110 | Manoj    | IT         | 70000.00 |          8 | Hyderabad |   35 |
++--------+----------+------------+----------+------------+-----------+------+
+4 rows in set (0.00 sec)
+
+
+EXAMPLE 5 :
+-----
+DELIMITER //
+ CREATE PROCEDURE getCountEmployees()
+      BEGIN
+         SELECT COUNT(*) AS TOTEMPLOYEES
+         FROM employees;
+      END //
+Query OK, 0 rows affected (0.04 sec)
+
+ DELIMITER ;
+ CALL getCountEmployees();
+
+
++--------------+
+| TOTEMPLOYEES |
++--------------+
+|           10 |
++--------------+
+1 row in set (0.01 sec)
+
+# IN PARAMETER 
+===============
+
+EMAMPLE 6 : 
+-----
+DELIMITER //
+mysql> CREATE PROCEDURE GETEMPLOYEEBYID(IN EID INT)
+    -> BEGIN
+    -> SELECT*FROM EMPLOYEES WHERE EMP_ID=EID;
+    -> END //
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DELIMITER ;
+mysql> CALL GETEMPLOYEEBYID(105);
++--------+----------+------------+----------+------------+-----------+------+
+| emp_id | emp_name | department | salary   | experience | city      | age  |
++--------+----------+------------+----------+------------+-----------+------+
+|    105 | Priya    | Finance    | 60000.00 |          6 | Bangalore |   32 |
++--------+----------+------------+----------+------------+-----------+------+
+
+EXAMPLE 7 :
+-------
+DELIMITER //
+mysql> CREATE PROCEDURE GETEMPLOYEESBYDEPARTMENT(IN DEPT_NAME VARCHAR(20))
+    -> BEGIN
+    -> SELECT*FROM EMPLOYEES WHERE DEPARTMENT=DEPT_NAME;
+    -> END //
+Query OK, 0 rows affected (0.06 sec)
+
+DELIMITER ;
+mysql> CALL GETEMPLOYEESBYDEPARTMENT('HR');
++--------+----------+------------+----------+------------+------------+------+
+| emp_id | emp_name | department | salary   | experience | city       | age  |
++--------+----------+------------+----------+------------+------------+------+
+|    102 | Kiran    | HR         | 40000.00 |          3 | Vijayawada |   27 |
+|    107 | Rahul    | HR         | 42000.00 |          2 | Hyderabad  |   25 |
++--------+----------+------------+----------+------------+------------+------+
+2 rows in set (0.00 sec)
+
+EXAMPLE 8 :
+------
+
+mysql> DELIMITER //
+mysql> CREATE PROCEDURE DETEMPLOYEESSALARY(IN SALARY INT(30))
+    -> BEGIN
+    -> SELECT*FROM EMPLOYEES WHERE SALARY=SALARY^C
+mysql>  DELIMITER //
+mysql> CREATE PROCEDURE SALARY_BETWEEN_EMPLOYEES(IN MIN_SALARY DECIMAL(7,2),IN MAX_SALARY DECIMAL(10,2))
+    -> BEGIN
+    -> SELECT*FROM EMPLOYEES WHERE SALARY>=MIN_SALARY AND SALARY<=MAX_SALARY;
+    -> END //
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> DELIMITER ;
+mysql> CALL SALARY_BETWEEN_EMPLOYEES(40000,60000);
++--------+----------+------------+----------+------------+------------+------+
+| emp_id | emp_name | department | salary   | experience | city       | age  |
++--------+----------+------------+----------+------------+------------+------+
+|    101 | Ravi     | IT         | 45000.00 |          2 | Hyderabad  |   24 |
+|    102 | Kiran    | HR         | 40000.00 |          3 | Vijayawada |   27 |
+|    103 | Suresh   | IT         | 55000.00 |          5 | Hyderabad  |   30 |
+|    105 | Priya    | Finance    | 60000.00 |          6 | Bangalore  |   32 |
+|    106 | Sneha    | IT         | 50000.00 |          4 | Vizag      |   28 |
+|    107 | Rahul    | HR         | 42000.00 |          2 | Hyderabad  |   25 |
++--------+----------+------------+----------+------------+------------+------+
+6 rows in set (0.05 sec)
+
+Query OK, 0 rows affected (0.11 sec)
+ 
+OUT PARAMETER 
+===============
+
+EXAMPLE 9 :
+---------
+DELIMITER //
+CREATE PROCEDURE TOTAL_EMPLOYEES(
+      OUT TOTAL INT
+)
+BEGIN
+SELECT COUNT(*)
+INTO TOTAL
+FROM EMPLOYEES;
+END //
+
+
+DELIMITER ;
+SET @TOTAL = 0;
+CALL TOTAL_EMPLOYEES(@TOTAL);
+SELECT @TOTAL;
+
+
+mysql> SELECT @ TOTAL;
++--------------+
+| TOTAL        |
++--------------+
+| NULL         |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT @TOTAL;
++--------+
+| @TOTAL |
++--------+
+|     10 |
++--------+
+
+
+EXAMPLE 10:
+-----------
+delimiter //
+ create procedure maximum_salary(out max_sal decimal(10,2))
+     begin
+     select max(salary)into max_sal from employees;
+     end //
+
+delimiter ;
+ set @max_sal=0;
+
+call maximum_salary(@max_sal);
+
+select @max_sal;
+
++----------+
+| @max_sal |
++----------+
+| 70000.00 |
++----------+
+1 row in set (0.00 sec)
+
+
+
+EXAMPLE 11:
+--------
+delimiter //
+ create procedure employee_salary(in eid int,out emp_sal decimal(10,2))
+     begin
+     select salary into emp_sal from employees where emp_id=eid;
+     end //
+
+delimiter ;
+ set @emp_salary=0;
+
+call employee_salary(105,@emp_salary);
+
+select @emp_salary;
+
++-------------+
+| @emp_salary |
++-------------+
+|    60000.00 |
++-------------+
+1 row in set (0.00 sec)
