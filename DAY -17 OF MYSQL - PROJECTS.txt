@@ -1,0 +1,696 @@
+
+# PROJECTS
+=======================
+1. BOOKSTORE 
+=======================
+CREATE DATABASE IF NOT EXISTS bookstore_db;
+
+USE bookstore_db;
+
+-- 1. Authors
+CREATE TABLE Authors (
+    author_id INT AUTO_INCREMENT PRIMARY KEY,
+    author_name VARCHAR(100) NOT NULL,
+    bio TEXT
+);
+
+-- 2. Genres
+CREATE TABLE Genres (
+    genre_id INT AUTO_INCREMENT PRIMARY KEY,
+    genre_name VARCHAR(50) NOT NULL
+);
+
+-- 3. Customers
+CREATE TABLE Customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    city VARCHAR(50),
+    join_date DATE
+);
+
+-- 4. Books
+CREATE TABLE Books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150),
+    price DECIMAL(10,2),
+    stock_quantity INT,
+    author_id INT,
+    genre_id INT,
+    
+    FOREIGN KEY (author_id) REFERENCES Authors(author_id),
+    FOREIGN KEY (genre_id) REFERENCES Genres(genre_id)
+);
+
+-- 5. Orders
+CREATE TABLE Orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    customer_id INT,
+    
+    FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+);
+
+-- 6. Order_Details
+CREATE TABLE Order_Details (
+    detail_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    book_id INT,
+    quantity_ordered INT,
+    price_at_time_of_order DECIMAL(10,2),
+    
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    FOREIGN KEY (book_id) REFERENCES Books(book_id)
+);
+
+-- Insert Authors
+INSERT INTO Authors (author_name, bio) VALUES
+('Chetan Bhagat', 'Indian author known for 5 Point Someone.'),
+('Arundhati Roy', 'Winner of the Man Booker Prize.'),
+('R.K. Narayan', 'Creator of Malgudi Days.'),
+('Amish Tripathi', 'Known for the Shiva Trilogy.');
+
+-- Insert Genres
+INSERT INTO Genres (genre_name) VALUES
+('Fiction'),
+('Mythology'),
+('History'),
+('Romance');
+
+-- Insert Books
+INSERT INTO Books
+(title, price, stock_quantity, author_id, genre_id)
+VALUES
+('Five Point Someone', 250.00, 50, 1, 1),
+('2 States', 300.00, 40, 1, 4),
+('The God of Small Things', 450.00, 20, 2, 1),
+('Malgudi Days', 200.00, 100, 3, 1),
+('The Immortals of Meluha', 399.00, 60, 4, 2);
+
+-- Insert Customers
+INSERT INTO Customers
+(name, email, city, join_date)
+VALUES
+('Aarav Sharma', 'aarav@gmail.com', 'Mumbai', '2023-01-10'),
+('Diya Patel', 'diya.p@yahoo.com', 'Ahmedabad', '2023-02-15'),
+('Vihaan Reddy', 'vihaan.r@outlook.com', 'Hyderabad', '2023-03-20'),
+('Ananya Gupta', 'ananya.g@gmail.com', 'Delhi', '2023-04-05');
+
+-- Insert Orders
+INSERT INTO Orders
+(order_date, customer_id)
+VALUES
+('2023-05-01', 1),
+('2023-05-03', 2),
+('2023-05-05', 1),
+('2023-06-01', 3);
+
+-- Insert Order_Details
+INSERT INTO Order_Details
+(order_id, book_id, quantity_ordered, price_at_time_of_order)
+VALUES
+(1, 1, 1, 250.00),
+(1, 4, 2, 200.00),
+(2, 5, 1, 399.00),
+(3, 2, 1, 300.00),
+(4, 3, 1, 450.00);
+
+-- Verify Data
+SELECT * FROM Authors;
+SELECT * FROM Genres;
+SELECT * FROM Customers;
+SELECT * FROM Books;
+SELECT * FROM Orders;
+SELECT * FROM Order_Details;
+
+
++-----------+----------------+------------------------------------------+
+| author_id | author_name    | bio                                      |
++-----------+----------------+------------------------------------------+
+|         1 | Chetan Bhagat  | Indian author known for 5 Point Someone. |
+|         2 | Arundhati Roy  | Winner of the Man Booker Prize.          |
+|         3 | R.K. Narayan   | Creator of Malgudi Days.                 |
+|         4 | Amish Tripathi | Known for the Shiva Trilogy.             |
++-----------+----------------+------------------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Genres;
++----------+------------+
+| genre_id | genre_name |
++----------+------------+
+|        1 | Fiction    |
+|        2 | Mythology  |
+|        3 | History    |
+|        4 | Romance    |
++----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Customers;
++-------------+--------------+----------------------+-----------+------------+
+| customer_id | name         | email                | city      | join_date  |
++-------------+--------------+----------------------+-----------+------------+
+|           1 | Aarav Sharma | aarav@gmail.com      | Mumbai    | 2023-01-10 |
+|           2 | Diya Patel   | diya.p@yahoo.com     | Ahmedabad | 2023-02-15 |
+|           3 | Vihaan Reddy | vihaan.r@outlook.com | Hyderabad | 2023-03-20 |
+|           4 | Ananya Gupta | ananya.g@gmail.com   | Delhi     | 2023-04-05 |
++-------------+--------------+----------------------+-----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Books;
++---------+-------------------------+--------+----------------+-----------+----------+
+| book_id | title                   | price  | stock_quantity | author_id | genre_id |
++---------+-------------------------+--------+----------------+-----------+----------+
+|       1 | Five Point Someone      | 250.00 |             50 |         1 |        1 |
+|       2 | 2 States                | 300.00 |             40 |         1 |        4 |
+|       3 | The God of Small Things | 450.00 |             20 |         2 |        1 |
+|       4 | Malgudi Days            | 200.00 |            100 |         3 |        1 |
+|       5 | The Immortals of Meluha | 399.00 |             60 |         4 |        2 |
++---------+-------------------------+--------+----------------+-----------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Orders;
++----------+------------+-------------+
+| order_id | order_date | customer_id |
++----------+------------+-------------+
+|        1 | 2023-05-01 |           1 |
+|        2 | 2023-05-03 |           2 |
+|        3 | 2023-05-05 |           1 |
+|        4 | 2023-06-01 |           3 |
++----------+------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Order_Details;
++-----------+----------+---------+------------------+------------------------+
+| detail_id | order_id | book_id | quantity_ordered | price_at_time_of_order |
++-----------+----------+---------+------------------+------------------------+
+|         1 |        1 |       1 |                1 |                 250.00 |
+|         2 |        1 |       4 |                2 |                 200.00 |
+|         3 |        2 |       5 |                1 |                 399.00 |
+|         4 |        3 |       2 |                1 |                 300.00 |
+|         5 |        4 |       3 |                1 |                 450.00 |
++-----------+----------+---------+------------------+------------------------+
+
+1. LIST ALL BOOKS THE COST LESS THAN 300 RUPEES
+2. FIND THE EMAIL ADRESS OF VIHAAN REDDY.
+3. DISPLAY ALL BOOKS IN THE FICTION GENRE
+4. LIST ALL AUTHORS ALPHABRTICALLY.
+5. COUNT HOW MANY CUSTOMERS ARE FROM MUMBAI
+6. SHOW THE MOST EXPENSIVE BOOK.
+
+
+mysql> SELECT TITLE,PRICE FROM BOOKS WHERE PRICE<300;
++--------------------+--------+
+| TITLE              | PRICE  |
++--------------------+--------+
+| Five Point Someone | 250.00 |
+| Malgudi Days       | 200.00 |
++--------------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT EMAIL FROM CUSTOMERS WHERE NAME='VIHAAN REDDY';
++----------------------+
+| EMAIL                |
++----------------------+
+| vihaan.r@outlook.com |
++----------------------+
+1 row in set (0.05 sec)
+
+mysql> SELECT TITLE FROM BOOKS WHERE GENRE_ID=1;
++-------------------------+
+| TITLE                   |
++-------------------------+
+| Five Point Someone      |
+| The God of Small Things |
+| Malgudi Days            |
++-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT*FROM AUTHORS ORDER BY AUTHOR_NAME;
++-----------+----------------+------------------------------------------+
+| author_id | author_name    | bio                                      |
++-----------+----------------+------------------------------------------+
+|         4 | Amish Tripathi | Known for the Shiva Trilogy.             |
+|         2 | Arundhati Roy  | Winner of the Man Booker Prize.          |
+|         1 | Chetan Bhagat  | Indian author known for 5 Point Someone. |
+|         3 | R.K. Narayan   | Creator of Malgudi Days.                 |
++-----------+----------------+------------------------------------------+
+
+mysql> SELECT COUNT(*)FROM CUSTOMERS WHERE CITY='MUMBAI';
++----------+
+| COUNT(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.05 sec)
+
+mysql> SELECT*FROM BOOKS ORDER BY PRICE DESC LIMIT 1;
++---------+-------------------------+--------+----------------+-----------+----------+
+| book_id | title                   | price  | stock_quantity | author_id | genre_id |
++---------+-------------------------+--------+----------------+-----------+----------+
+|       3 | The God of Small Things | 450.00 |             20 |         2 |        1 |
++---------+-------------------------+--------+----------------+-----------+----------+
+
+ at line 1
+mysql> SELECT*FROM BOOKS ORDER BY PRICE>450 ;
++---------+-------------------------+--------+----------------+-----------+----------+
+| book_id | title                   | price  | stock_quantity | author_id | genre_id |
++---------+-------------------------+--------+----------------+-----------+----------+
+|       1 | Five Point Someone      | 250.00 |             50 |         1 |        1 |
+|       2 | 2 States                | 300.00 |             40 |         1 |        4 |
+|       3 | The God of Small Things | 450.00 |             20 |         2 |        1 |
+|       4 | Malgudi Days            | 200.00 |            100 |         3 |        1 |
+|       5 | The Immortals of Meluha | 399.00 |             60 |         4 |        2 |
++---------+-------------------------+--------+----------------+-----------+----------+
+INNER JOIN :
+TWO TABLES IN COMMON TITLE WITH author name
+
+select b.title,a.author_name from books b
+    -> join authors a
+    -> on
+    -> b.author_id=a.author_id;
++-------------------------+----------------+
+| title                   | author_name    |
++-------------------------+----------------+
+| Five Point Someone      | Chetan Bhagat  |
+| 2 States                | Chetan Bhagat  |
+| The God of Small Things | Arundhati Roy  |
+| Malgudi Days            | R.K. Narayan   |
+| The Immortals of Meluha | Amish Tripathi |
++-------------------------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select*from orders where order_date between '2023-05-01' and '2023-05-31';
++----------+------------+-------------+
+| order_id | order_date | customer_id |
++----------+------------+-------------+
+|        1 | 2023-05-01 |           1 |
+|        2 | 2023-05-03 |           2 |
+|        3 | 2023-05-05 |           1 |
++----------+------------+-------------+
+3 rows in set (0.00 sec)
+
+
+# IT IS JOIN FOR THREE TABLES;
+
+mysql> SELECT C.NAME,SUM(OD.PRICE_AT_TIME_OF_ORDER*OD.QUANTITY_ORDERED)
+    -> FROM CUSTOMERS C
+    -> JOIN ORDERS O
+    -> ON C. CUSTOMER_ID=O.CUSTOMER_ID
+    -> JOIN ORDER_DETAILS OD
+    -> ON O.ORDER_ID=OD.ORDER_ID
+    -> WHERE C.NAME='AARAV SHARMA' GROUP BY C.NAME;
++--------------+----------------------------------------------------+
+| NAME         | SUM(OD.PRICE_AT_TIME_OF_ORDER*OD.QUANTITY_ORDERED) |
++--------------+----------------------------------------------------+
+| Aarav Sharma |                                             950.00 |
++--------------+----------------------------------------------------+
+1 row in set (0.01 sec)
+
+
+#  DISPLAY THE NEVER  ORDER FOR BOOKS;
+
+ SELECT A.AUTHOR_NAME,SUM(OD.QUANTITY_ORDERED)
+    -> FROM AUTHORS A
+    -> JOIN BOOKS B ON  A.AUTHOR_ID=B.AUTHOR_ID
+    -> JOIN ORDER_DETAILS OD ON B.BOOK_ID=OD.BOOK_ID GROUP BY A.AUTHOR_NAME;
++----------------+--------------------------+
+| AUTHOR_NAME    | SUM(OD.QUANTITY_ORDERED) |
++----------------+--------------------------+
+| Chetan Bhagat  |                        2 |
+| Arundhati Roy  |                        1 |
+| R.K. Narayan   |                        2 |
+| Amish Tripathi |                        1 |
++----------------+--------------------------+
+
+1. CUSTOMERS WITH HIGHEST NUMBER OF ORDERS.
+
+ SELECT C.NAME,COUNT(O.ORDER_ID)AS CNT FROM CUSTOMERS C
+     JOIN ORDERS O ON C.CUSTOMER_ID=O.CUSTOMER_ID GROUP BY C.NAME
+    ORDER BY CNT DESC LIMIT 1;
++--------------+-----+
+| NAME         | CNT |
++--------------+-----+
+| Aarav Sharma |   2 |
++--------------+-----+
+1 row in set (0.00 sec)
+
+2. AUTHOR WITH AVERAGE BOOK PRICE>300;
+
+SELECT A.AUTHOR_NAME,AVG(B.PRICE)FROM AUTHORS A
+    -> JOIN BOOKS B ON A.AUTHOR_ID=B.AUTHOR_ID GROUP BY
+    -> A.AUTHOR_NAME HAVING AVG(B.PRICE)>300;
++----------------+--------------+
+| AUTHOR_NAME    | AVG(B.PRICE) |
++----------------+--------------+
+| Arundhati Roy  |   450.000000 |
+| Amish Tripathi |   399.000000 |
++----------------+--------------+
+2 rows in set (0.00 sec)
+
+3. TO DISPLAY THE BEST SELLING BOOK.
+
+SELECT NAME FROM CUSTOMERS WHERE CUSTOMER_ID NOT IN(
+    -> SELECT CUSTOMER_ID FROM ORDERS
+    -> WHERE ORDER_DATE>=DATE_SUB(CURDATE(),INTERVAL 6 MONTH));
++--------------+
+| NAME         |
++--------------+
+| Aarav Sharma |
+| Diya Patel   |
+| Vihaan Reddy |
+| Ananya Gupta |
++--------------+
+
+4.
+SELECT SUM(OD.QUANTITY_ORDERED*OD.PRICE_AT_TIME_OF_ORDER)
+    -> FROM GENRES G
+    -> JOIN BOOKS B ON G.GENRE_ID=B.GENRE_ID
+    -> JOIN ORDER_DETAILS OD ON B.BOOK_ID=OD.BOOK_ID WHERE G.GENRE_NAME='FICTION';
++----------------------------------------------------+
+| SUM(OD.QUANTITY_ORDERED*OD.PRICE_AT_TIME_OF_ORDER) |
++----------------------------------------------------+
+|                                            1100.00 |
++----------------------------------------------------+
+
+
+=================================================
+2. jeevan_raksha_pharmacY
+==================================================
+CREATE DATABASE IF NOT EXISTS jeevan_raksha_pharmacy;
+
+USE jeevan_raksha_pharmacy;
+
+-- 1. Create Tables
+
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    phone VARCHAR(15),
+    city VARCHAR(50)
+);
+
+CREATE TABLE suppliers (
+    supplier_id INT AUTO_INCREMENT PRIMARY KEY,
+    supplier_name VARCHAR(100),
+    contact_person VARCHAR(100),
+    phone VARCHAR(15)
+);
+
+CREATE TABLE medicines (
+    medicine_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    category VARCHAR(50),
+    price DECIMAL(10,2),
+    stock_quantity INT,
+    expiry_date DATE,
+    supplier_id INT,
+    FOREIGN KEY (supplier_id) REFERENCES suppliers(supplier_id)
+);
+
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    total_amount DECIMAL(10,2),
+    payment_mode ENUM('UPI', 'Cash', 'Card'),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+CREATE TABLE order_items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    medicine_id INT,
+    quantity INT,
+    subtotal DECIMAL(10,2),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (medicine_id) REFERENCES medicines(medicine_id)
+);
+
+-- 2. Insert Data
+
+-- Customers
+INSERT INTO customers (name, phone, city) VALUES
+('Rahul Sharma', '9876543210', 'Mumbai'),
+('Priya Verma', '9123456789', 'Delhi'),
+('Amit Patel', '9988776655', 'Ahmedabad'),
+('Sneha Reddy', '8877665544', 'Hyderabad'),
+('Vikram Singh', '7766554433', 'Mumbai');
+
+-- Suppliers
+INSERT INTO suppliers (supplier_name, contact_person, phone) VALUES
+('Apollo Distributors', 'Rajesh Gupta', '022-123456'),
+('MedPlus Supply Chain', 'Suresh Nair', '040-987654'),
+('Himalaya Wellness', 'Anjali Mehta', '011-456789');
+
+-- Medicines
+INSERT INTO medicines 
+(name, category, price, stock_quantity, expiry_date, supplier_id)
+VALUES
+('Dolo 650', 'Tablet', 30.00, 500, '2025-12-31', 1),
+('Azithral 500', 'Tablet', 120.00, 50, '2024-05-20', 1),
+('Benadryl', 'Syrup', 110.00, 20, '2024-11-15', 2),
+('Combiflam', 'Tablet', 45.00, 200, '2026-01-01', 3),
+('Insulin Pen', 'Injection', 800.00, 5, '2024-03-10', 2);
+
+-- Orders
+INSERT INTO orders
+(customer_id, order_date, total_amount, payment_mode)
+VALUES
+(1, '2023-10-01', 150.00, 'UPI'),
+(2, '2023-10-02', 240.00, 'Card'),
+(3, '2023-10-05', 45.00, 'Cash'),
+(1, '2023-10-10', 800.00, 'UPI'),
+(4, '2023-10-12', 1200.00, 'Card');
+
+-- Order Items
+INSERT INTO order_items
+(order_id, medicine_id, quantity, subtotal)
+VALUES
+(1, 1, 5, 150.00),
+(2, 2, 2, 240.00),
+(3, 4, 1, 45.00),
+(4, 5, 1, 800.00),
+(5, 5, 1, 800.00),
+(5, 2, 2, 240.00),
+(5, 1, 5, 150.00);
+
+-- Verify Data
+SELECT * FROM customers;
+SELECT * FROM suppliers;
+SELECT * FROM medicines;
+SELECT * FROM orders;
+SELECT * FROM order_items;
+
+
+ Verify Data
+mysql> SELECT * FROM customers;
++-------------+--------------+------------+-----------+
+| customer_id | name         | phone      | city      |
++-------------+--------------+------------+-----------+
+|           1 | Rahul Sharma | 9876543210 | Mumbai    |
+|           2 | Priya Verma  | 9123456789 | Delhi     |
+|           3 | Amit Patel   | 9988776655 | Ahmedabad |
+|           4 | Sneha Reddy  | 8877665544 | Hyderabad |
+|           5 | Vikram Singh | 7766554433 | Mumbai    |
++-------------+--------------+------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM suppliers;
++-------------+----------------------+----------------+------------+
+| supplier_id | supplier_name        | contact_person | phone      |
++-------------+----------------------+----------------+------------+
+|           1 | Apollo Distributors  | Rajesh Gupta   | 022-123456 |
+|           2 | MedPlus Supply Chain | Suresh Nair    | 040-987654 |
+|           3 | Himalaya Wellness    | Anjali Mehta   | 011-456789 |
++-------------+----------------------+----------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM medicines;
++-------------+--------------+-----------+--------+----------------+-------------+-------------+
+| medicine_id | name         | category  | price  | stock_quantity | expiry_date | supplier_id |
++-------------+--------------+-----------+--------+----------------+-------------+-------------+
+|           1 | Dolo 650     | Tablet    |  30.00 |            500 | 2025-12-31  |           1 |
+|           2 | Azithral 500 | Tablet    | 120.00 |             50 | 2024-05-20  |           1 |
+|           3 | Benadryl     | Syrup     | 110.00 |             20 | 2024-11-15  |           2 |
+|           4 | Combiflam    | Tablet    |  45.00 |            200 | 2026-01-01  |           3 |
+|           5 | Insulin Pen  | Injection | 800.00 |              5 | 2024-03-10  |           2 |
++-------------+--------------+-----------+--------+----------------+-------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM orders;
++----------+-------------+------------+--------------+--------------+
+| order_id | customer_id | order_date | total_amount | payment_mode |
++----------+-------------+------------+--------------+--------------+
+|        1 |           1 | 2023-10-01 |       150.00 | UPI          |
+|        2 |           2 | 2023-10-02 |       240.00 | Card         |
+|        3 |           3 | 2023-10-05 |        45.00 | Cash         |
+|        4 |           1 | 2023-10-10 |       800.00 | UPI          |
+|        5 |           4 | 2023-10-12 |      1200.00 | Card         |
++----------+-------------+------------+--------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM order_items;
++---------+----------+-------------+----------+----------+
+| item_id | order_id | medicine_id | quantity | subtotal |
++---------+----------+-------------+----------+----------+
+|       1 |        1 |           1 |        5 |   150.00 |
+|       2 |        2 |           2 |        2 |   240.00 |
+|       3 |        3 |           4 |        1 |    45.00 |
+|       4 |        4 |           5 |        1 |   800.00 |
+|       5 |        5 |           5 |        1 |   800.00 |
+|       6 |        5 |           2 |        2 |   240.00 |
+|       7 |        5 |           1 |        5 |   150.00 |
++---------+----------+-------------+----------+----------+
+7 rows in set (0.00 sec)
+
+
+
+
+
+==================================
+3. DATA BASE
+===================================
+
+-- Create Database
+CREATE DATABASE studentdb;
+
+-- Use Database
+USE studentdb;
+
+-- Create Students Table
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    enrollment_year INT
+);
+
+-- Create Subjects Table
+CREATE TABLE Subjects (
+    subject_id INT PRIMARY KEY,
+    subject_name VARCHAR(50)
+);
+
+-- Create Exams Table
+CREATE TABLE Exams (
+    exam_id INT PRIMARY KEY,
+    exam_name VARCHAR(50),
+    exam_date DATE
+);
+
+-- Create Marks Table
+CREATE TABLE Marks (
+    mark_id INT PRIMARY KEY,
+    student_id INT,
+    subject_id INT,
+    exam_id INT,
+    score INT,
+    
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (subject_id) REFERENCES Subjects(subject_id),
+    FOREIGN KEY (exam_id) REFERENCES Exams(exam_id)
+);
+
+
+
+
+
+
+
+
+
+
+
+-- Insert Students Data
+INSERT INTO Students VALUES
+(1, 'Aarav', 'Sharma', 2023),
+(2, 'Diya', 'Patel', 2023),
+(3, 'Vihaan', 'Rao', 2024),
+(4, 'Ananya', 'Singh', 2024);
+
+-- Insert Subjects Data
+INSERT INTO Subjects VALUES
+(101, 'Mathematics'),
+(102, 'Science'),
+(103, 'Hindi Literature');
+
+-- Insert Exams Data
+INSERT INTO Exams VALUES
+(1, 'Half-Yearly 2024', '2024-09-15'),
+(2, 'Final Annual 2024', '2024-03-20');
+
+-- Insert Marks Data
+INSERT INTO Marks VALUES
+(1, 1, 101, 1, 85),  
+(2, 1, 102, 1, 90),  
+(3, 2, 101, 1, 75),  
+(4, 2, 102, 1, 60),  
+(5, 3, 101, 1, 95),  
+(6, 1, 101, 2, 88),  
+(7, 2, 101, 2, 79),  
+(8, 3, 101, 2, 92);
+
+-- Verify Data
+SELECT * FROM Students;
+SELECT * FROM Subjects;
+SELECT * FROM Exams;
+SELECT * FROM Marks;
+
+
+-- Verify Data
+mysql> SELECT * FROM Students;
++------------+------------+-----------+-----------------+
+| student_id | first_name | last_name | enrollment_year |
++------------+------------+-----------+-----------------+
+|          1 | Aarav      | Sharma    |            2023 |
+|          2 | Diya       | Patel     |            2023 |
+|          3 | Vihaan     | Rao       |            2024 |
+|          4 | Ananya     | Singh     |            2024 |
++------------+------------+-----------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Subjects;
++------------+------------------+
+| subject_id | subject_name     |
++------------+------------------+
+|        101 | Mathematics      |
+|        102 | Science          |
+|        103 | Hindi Literature |
++------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Exams;
++---------+-------------------+------------+
+| exam_id | exam_name         | exam_date  |
++---------+-------------------+------------+
+|       1 | Half-Yearly 2024  | 2024-09-15 |
+|       2 | Final Annual 2024 | 2024-03-20 |
++---------+-------------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Marks;
++---------+------------+------------+---------+-------+
+| mark_id | student_id | subject_id | exam_id | score |
++---------+------------+------------+---------+-------+
+|       1 |          1 |        101 |       1 |    85 |
+|       2 |          1 |        102 |       1 |    90 |
+|       3 |          2 |        101 |       1 |    75 |
+|       4 |          2 |        102 |       1 |    60 |
+|       5 |          3 |        101 |       1 |    95 |
+|       6 |          1 |        101 |       2 |    88 |
+|       7 |          2 |        101 |       2 |    79 |
+|       8 |          3 |        101 |       2 |    92 |
++---------+------------+------------+---------+-------+
+8 rows in set (0.00 sec)
+
+
+
+
+
+
+
+
+
+
+
+
