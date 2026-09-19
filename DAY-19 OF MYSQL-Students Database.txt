@@ -1,0 +1,389 @@
+DAY-18 OF MYSQL-Students Database
+
+Create Database
+CREATE DATABASE studentdb;
+
+-- Use Database
+USE studentdb;
+
+-- Create Students Table
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    enrollment_year INT
+);
+
+-- Create Subjects Table
+CREATE TABLE Subjects (
+    subject_id INT PRIMARY KEY,
+    subject_name VARCHAR(50)
+);
+
+-- Create Exams Table
+CREATE TABLE Exams (
+    exam_id INT PRIMARY KEY,
+    exam_name VARCHAR(50),
+    exam_date DATE
+);
+
+-- Create Marks Table
+CREATE TABLE Marks (
+    mark_id INT PRIMARY KEY,
+    student_id INT,
+    subject_id INT,
+    exam_id INT,
+    score INT,
+    
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (subject_id) REFERENCES Subjects(subject_id),
+    FOREIGN KEY (exam_id) REFERENCES Exams(exam_id)
+);
+
+
+
+
+
+
+
+
+
+
+
+-- Insert Students Data
+INSERT INTO Students VALUES
+(1, 'Aarav', 'Sharma', 2023),
+(2, 'Diya', 'Patel', 2023),
+(3, 'Vihaan', 'Rao', 2024),
+(4, 'Ananya', 'Singh', 2024);
+
+-- Insert Subjects Data
+INSERT INTO Subjects VALUES
+(101, 'Mathematics'),
+(102, 'Science'),
+(103, 'Hindi Literature');
+
+-- Insert Exams Data
+INSERT INTO Exams VALUES
+(1, 'Half-Yearly 2024', '2024-09-15'),
+(2, 'Final Annual 2024', '2024-03-20');
+
+-- Insert Marks Data
+INSERT INTO Marks VALUES
+(1, 1, 101, 1, 85),  
+(2, 1, 102, 1, 90),  
+(3, 2, 101, 1, 75),  
+(4, 2, 102, 1, 60),  
+(5, 3, 101, 1, 95),  
+(6, 1, 101, 2, 88),  
+(7, 2, 101, 2, 79),  
+(8, 3, 101, 2, 92);
+
+-- Verify Data
+SELECT * FROM Students;
+SELECT * FROM Subjects;
+SELECT * FROM Exams;
+SELECT * FROM Marks;
+
+
+
+ Verify Data
+mysql> SELECT * FROM Students;
++------------+------------+-----------+-----------------+
+| student_id | first_name | last_name | enrollment_year |
++------------+------------+-----------+-----------------+
+|          1 | Aarav      | Sharma    |            2023 |
+|          2 | Diya       | Patel     |            2023 |
+|          3 | Vihaan     | Rao       |            2024 |
+|          4 | Ananya     | Singh     |            2024 |
++------------+------------+-----------+-----------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Subjects;
++------------+------------------+
+| subject_id | subject_name     |
++------------+------------------+
+|        101 | Mathematics      |
+|        102 | Science          |
+|        103 | Hindi Literature |
++------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Exams;
++---------+-------------------+------------+
+| exam_id | exam_name         | exam_date  |
++---------+-------------------+------------+
+|       1 | Half-Yearly 2024  | 2024-09-15 |
+|       2 | Final Annual 2024 | 2024-03-20 |
++---------+-------------------+------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Marks;
++---------+------------+------------+---------+-------+
+| mark_id | student_id | subject_id | exam_id | score |
++---------+------------+------------+---------+-------+
+|       1 |          1 |        101 |       1 |    85 |
+|       2 |          1 |        102 |       1 |    90 |
+|       3 |          2 |        101 |       1 |    75 |
+|       4 |          2 |        102 |       1 |    60 |
+|       5 |          3 |        101 |       1 |    95 |
+|       6 |          1 |        101 |       2 |    88 |
+|       7 |          2 |        101 |       2 |    79 |
+|       8 |          3 |        101 |       2 |    92 |
++---------+------------+------------+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql>
+
+
+QURIES:
+ 1. REtrieve all students:list the first and last name of every student.
+2. filter by score: List all entries in the marjs table where the score is grater than 80.
+ 3. SORT DATA: list all exams sorted by their data,starting with the most recent.
+4. 
+
+
+
++------------+-----------+
+| FIRST_NAME | LAST_NAME |
++------------+-----------+
+| Aarav      | Sharma    |
+| Diya       | Patel     |
+| Vihaan     | Rao       |
+| Ananya     | Singh     |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT*FROM MARKS WHERE SCORE>80;
++---------+------------+------------+---------+-------+
+| mark_id | student_id | subject_id | exam_id | score |
++---------+------------+------------+---------+-------+
+|       1 |          1 |        101 |       1 |    85 |
+|       2 |          1 |        102 |       1 |    90 |
+|       5 |          3 |        101 |       1 |    95 |
+|       6 |          1 |        101 |       2 |    88 |
+|       8 |          3 |        101 |       2 |    92 |
++---------+------------+------------+---------+-------+
+5 rows in set (0.05 sec)
+
+mysql> SELECT*FROM EXAMS ORDER BY EXAM_DATE DESC;
++---------+-------------------+------------+
+| exam_id | exam_name         | exam_date  |
++---------+-------------------+------------+
+|       1 | Half-Yearly 2024  | 2024-09-15 |
+|       2 | Final Annual 2024 | 2024-03-20 |
++---------+-------------------+------------+
+
+
++------------+-----------+
+| FIRST_NAME | LAST_NAME |
++------------+-----------+
+| Aarav      | Sharma    |
+| Diya       | Patel     |
+| Vihaan     | Rao       |
+| Ananya     | Singh     |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT*FROM MARKS WHERE SCORE>80;
++---------+------------+------------+---------+-------+
+| mark_id | student_id | subject_id | exam_id | score |
++---------+------------+------------+---------+-------+
+|       1 |          1 |        101 |       1 |    85 |
+|       2 |          1 |        102 |       1 |    90 |
+|       5 |          3 |        101 |       1 |    95 |
+|       6 |          1 |        101 |       2 |    88 |
+|       8 |          3 |        101 |       2 |    92 |
++---------+------------+------------+---------+-------+
+5 rows in set (0.05 sec)
+
+mysql> SELECT*FROM EXAMS ORDER BY EXAM_DATE DESC;
++---------+-------------------+------------+
+| exam_id | exam_name         | exam_date  |
++---------+-------------------+------------+
+|       1 | Half-Yearly 2024  | 2024-09-15 |
+|       2 | Final Annual 2024 | 2024-03-20 |
++---------+-------------------+------------+
+
+
+
++------------+-----------+
+| FIRST_NAME | LAST_NAME |
++------------+-----------+
+| Aarav      | Sharma    |
+| Diya       | Patel     |
+| Vihaan     | Rao       |
+| Ananya     | Singh     |
++------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT*FROM MARKS WHERE SCORE>80;
++---------+------------+------------+---------+-------+
+| mark_id | student_id | subject_id | exam_id | score |
++---------+------------+------------+---------+-------+
+|       1 |          1 |        101 |       1 |    85 |
+|       2 |          1 |        102 |       1 |    90 |
+|       5 |          3 |        101 |       1 |    95 |
+|       6 |          1 |        101 |       2 |    88 |
+|       8 |          3 |        101 |       2 |    92 |
++---------+------------+------------+---------+-------+
+5 rows in set (0.05 sec)
+
+mysql> SELECT*FROM EXAMS ORDER BY EXAM_DATE DESC;
++---------+-------------------+------------+
+| exam_id | exam_name         | exam_date  |
++---------+-------------------+------------+
+|       1 | Half-Yearly 2024  | 2024-09-15 |
+|       2 | Final Annual 2024 | 2024-03-20 |
++---------+-------------------+------------+
+
+
+4. SELECT ST.FIRST_NAME,SB.SUBJECT_NAME,M.SCORE
+     FROM MARKS M
+     JOIN STUDENTS ST ON M.STUDENT_ID=ST.STUDENT_ID
+     JOIN SUBJECTS SB ON M.SUBJECT_ID=SB.SUBJECT_ID;
+
+
++------------+--------------+-------+
+| FIRST_NAME | SUBJECT_NAME | SCORE |
++------------+--------------+-------+
+| Aarav      | Mathematics  |    85 |
+| Aarav      | Science      |    90 |
+| Aarav      | Mathematics  |    88 |
+| Diya       | Mathematics  |    75 |
+| Diya       | Science      |    60 |
+| Diya       | Mathematics  |    79 |
+| Vihaan     | Mathematics  |    95 |
+| Vihaan     | Mathematics  |    92 |
++------------+--------------+-------+
+
+5. 
+ SELECT SB.SUBJECT_NAME,AVG(M.SCORE)AS AVERAGE_SCORE
+     FROM MARKS M
+     JOIN SUBJECTS SB ON M.SUBJECT_ID=SB.SUBJECT_ID
+     GROUP BY SUBJECT_NAME
+     ORDER BY AVERAGE_SCORE DESC LIMIT 1 ;
++--------------+---------------+
+| SUBJECT_NAME | AVERAGE_SCORE |
++--------------+---------------+
+| Mathematics  |       85.6667 |
++--------------+---------------+
+
+ SELECT SB.SUBJECT_NAME,AVG(M.SCORE)AS AVERAGE_SCORE
+     FROM MARKS M
+     JOIN SUBJECTS SB ON M.SUBJECT_ID=SB.SUBJECT_ID
+     GROUP BY SUBJECT_NAME
+     ORDER BY AVERAGE_SCORE DESC;
+
+
++--------------+---------------+
+| SUBJECT_NAME | AVERAGE_SCORE |
++--------------+---------------+
+| Mathematics  |       85.6667 |
+| Science      |       75.0000 |
++--------------+---------------+
+
+
+6. 
+
+SELECT COUNT(*)AS TOTAL_MARKS_RECORDED FROM MARKS M
+   JOIN STUDENTS ST ON M.STUDENT_ID=ST.STUDENT_ID
+   WHERE ST.FIRST_NAME='AARAV' AND ST.LAST_NAME='SHARMA';
+
++----------------------+
+| total_marks_recorded |
++----------------------+
+|                    3 |
++----------------------+
+
+7. SELECT E.EXAM_NAME,SUM(M.SCORE)AS TOTAL_SCORE
+   FROM MARKS M
+   JOIN EXAMS E ON M.EXAM_ID=E.EXAM_ID
+   GROUP BY E.EXAM_NAME
+   HAVING TOTAL_SCORE>350;
+
++------------------+-------------+
+| EXAM_NAME        | TOTAL_SCORE |
++------------------+-------------+
+| Half-Yearly 2024 |         405 |
++------------------+-------------+
+
+
+SELECT E.EXAM_NAME,SUM(M.SCORE)AS TOTAL_SCORE
+   FROM MARKS M
+   JOIN EXAMS E ON M.EXAM_ID=E.EXAM_ID
+   GROUP BY E.EXAM_NAME
+   HAVING TOTAL_SCORE>50;
+
+
+    ->    HAVING TOTAL_SCORE>50;
++-------------------+-------------+
+| EXAM_NAME         | TOTAL_SCORE |
++-------------------+-------------+
+| Half-Yearly 2024  |         405 |
+| Final Annual 2024 |         259 |
++-------------------+-------------+
+
+
+8. select concat(first_name, ' ', last_name) as student_name, subject_name, score,
+ if(score >= 40, 'pass', 'fail') as status 
+from students
+ inner join marks on students.student_id = marks.student_id 
+inner join subjects on marks.subject_id = subjects.subject_id;
++--------------+--------------+-------+--------+
+| student_name | subject_name | score | status |
++--------------+--------------+-------+--------+
+| Aarav Sharma | Mathematics  |    85 | pass   |
+| Aarav Sharma | Science      |    90 | pass   |
+| Aarav Sharma | Mathematics  |    88 | pass   |
+| Diya Patel   | Mathematics  |    75 | pass   |
+| Diya Patel   | Science      |    60 | pass   |
+| Diya Patel   | Mathematics  |    79 | pass   |
+| Vihaan Rao   | Mathematics  |    95 | pass   |
+| Vihaan Rao   | Mathematics  |    92 | pass   |
++--------------+--------------+-------+--------+
+
+9. FIND THE STUDENTS WHO HAVE  NEVER APPERED FOR AN EXAM(I.E,HAVE NO ROWS IN MARKS).
+10. RANK ALL STUDENTS BY THEIR MATHEMATICS SCORE ,HIGHEST FIRST.
+
+SELECT
+    s.student_id,
+    s.first_name,
+    s.last_name,
+    m.score AS mathematics_score,
+    RANK() OVER (ORDER BY m.score DESC) AS student_rank
+FROM Students s
+JOIN Marks m ON s.student_id = m.student_id
+JOIN Subjects sub ON m.subject_id = sub.subject_id
+WHERE sub.subject_name = 'Mathematics'
+ORDER BY m.score DESC;
+
+
+
+11. FIND THE SECOND HIGHEST SCORE RECORDED IN THE ENTIRE MARKS TABLE.
+
+SELECT s.student_id, s.first_name, s.last_name
+FROM Students s
+LEFT JOIN Marks m ON s.student_id = m.student_id
+WHERE m.student_id IS NULL;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
